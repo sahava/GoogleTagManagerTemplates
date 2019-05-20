@@ -1,8 +1,9 @@
-﻿___INFO___
+___INFO___
 
 {
   "displayName": "Facebook Pixel",
-  "description": "This is a template prototype for the Facebook Pixel.",
+  "author": "Simo Ahava",
+  "description": "This is an unnofficial Google Tag Manager template for the Facebook Pixel.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
