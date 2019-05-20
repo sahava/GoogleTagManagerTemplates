@@ -2,7 +2,7 @@
 This is the basic conversion pixel for Facebook.
 
 # Author
-Simo Ahava (https://www.simoahava.com/)
+Simo Ahava (https://www.simoahava.com/).
 
 # Release notes
 | Date | Notes |
