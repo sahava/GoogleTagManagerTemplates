@@ -750,7 +750,7 @@ const initIds = copyFromWindow('_fbq_gtm_ids') || [];
 const pixelIds = data.pixelId;
 
 // Helper method
-const mergeObj = function(obj, obj2) {
+const mergeObj = (obj, obj2) => {
   for (let key in obj2) {
     if (obj2.hasOwnProperty(key)) {
       obj[key] = obj2[key];
@@ -762,7 +762,7 @@ const mergeObj = function(obj, obj2) {
 // Utility function to use either fbq.queue[]
 // (if the FB SDK hasn't loaded yet), or fbq.callMethod()
 // if the SDK has loaded.
-function getFbq() {
+const getFbq = () => {
   // Return the existing 'fbq' global method if available
   let fbq = copyFromWindow('fbq');
   if (fbq) {
@@ -786,7 +786,7 @@ function getFbq() {
     
   // Return the global 'fbq' method, created above
   return copyFromWindow('fbq');
-}
+};
 
 // Get reference to the global method
 const fbq = getFbq();
@@ -802,7 +802,7 @@ const initObj = mergeObj(uid, cidParams);
 
 // Handle multiple, comma-separated pixel IDs,
 // and initialize each ID if not done already.
-pixelIds.split(',').forEach(function(pixelId) {
+pixelIds.split(',').forEach(pixelId => {
   if (initIds.indexOf(pixelId) === -1) {
     
     // If the user has chosen to disable automatic configuration
