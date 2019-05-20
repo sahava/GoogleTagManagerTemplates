@@ -127,18 +127,18 @@ const queryPermission = require('queryPermission');
 const url = data.sourceUrl;
 
 // If the user chose to log debug output, initialize the logging method
-const log = data.logDebug ? logToConsole : function() {};
+const log = data.logDebug ? logToConsole : (() => {});
 
 log('Conductrics: Loading script from ' + url);
 
 // If the script loaded successfully, log a message and signal success
-const onSuccess = function() {
+const onSuccess = () => {
   log('Conductrics: Script loaded successfully.');
   data.gtmOnSuccess();
 };
 
 // If the script fails to load, log a message and signal failure
-const onFailure = function(e) {
+const onFailure = () => {
   log('Conductrics: Script load failed.');
   data.gtmOnFailure();
 };
