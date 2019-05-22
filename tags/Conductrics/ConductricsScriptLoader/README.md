@@ -1,5 +1,5 @@
 # Conductrics
-This is the loader template for [Conductrics](https://www.conductrics.com/) script tags.
+This is an **unofficial** loader template for [Conductrics](https://www.conductrics.com/) script tags.
 
 # Author
 Simo Ahava (https://www.simoahava.com/).
