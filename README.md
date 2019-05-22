@@ -12,4 +12,8 @@ To import a template file into your Google Tag Manager container, follow these s
 Importing a template file like this always **overwrites** any work you might have done in the underlying template, so you should always import to a newly created template.
 
 # Taxonomy
-The templates are organized by type (**tag** or **variable**), then by brand (e.g. **Facebook**), and then by template name.
+Templates are organized by type (**tag** or **variable**).
+
+Tag templates are organized by brand (e.g. **Facebook**), and then by template name.
+
+Variable templates are organized by template name.
