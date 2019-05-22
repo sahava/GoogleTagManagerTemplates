@@ -2,6 +2,7 @@
 
 {
   "displayName": "Adform tracking point",
+  "author": "Simo Ahava",
   "description": "The Adform tag template.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
