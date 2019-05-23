@@ -2,6 +2,7 @@
 
 {
   "displayName": "URL 2.0",
+  "author": "Simo Ahava",
   "description": "More advanced version of the URL variable.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
