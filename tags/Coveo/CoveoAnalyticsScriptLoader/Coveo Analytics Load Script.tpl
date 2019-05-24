@@ -1,8 +1,8 @@
 ﻿___INFO___
 
 {
-  "displayName": "Log Coveo Custom Event",
-  "description": "Logs a Coveo Custom View event in Coveo Cloud",
+  "displayName": "Coveo Analytics Load Script",
+  "description": "Loads the Coveo Analytics script to log various analytics event into Coveo Cloud.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
@@ -22,99 +22,39 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "displayName": "Event Metadata",
-    "name": "Event Definition",
-    "groupStyle": "ZIPPY_OPEN",
-    "type": "GROUP",
-    "subParams": [
+    "valueValidators": [
       {
-        "help": "",
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "displayName": "Event Type",
-        "simpleValueType": true,
-        "name": "eventType",
-        "type": "TEXT"
-      },
-      {
-        "help": "",
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "displayName": "Event Value",
-        "simpleValueType": true,
-        "name": "eventValue",
-        "type": "TEXT"
-      }
-    ]
-  },
-  {
-    "displayName": "Document Metadata",
-    "name": "Document Metadata",
-    "groupStyle": "ZIPPY_OPEN",
-    "type": "GROUP",
-    "subParams": [
-      {
-        "help": "(Optional) The current URL of the page. If not set, \"window.location\" will be used.",
-        "displayName": "Location",
-        "simpleValueType": true,
-        "name": "location",
-        "type": "TEXT"
-      },
-      {
-        "help": "(Optional) The title of the document. If not set, \"document.title\" will be used.",
-        "displayName": "Title",
-        "simpleValueType": true,
-        "name": "title",
-        "type": "TEXT"
-      },
-      {
-        "help": "(Optional) The current language of the page's content. If not set, will use the language set on the document.",
-        "displayName": "Language",
-        "simpleValueType": true,
-        "name": "language",
-        "type": "TEXT"
-      },
-      {
-        "help": "(Optional) Boolean representing whether the current visit is from an anonymous user.",
-        "displayName": "Is Anonymous",
-        "defaultValue": false,
-        "simpleValueType": true,
-        "name": "isAnonymous",
-        "type": "TEXT"
-      }
-    ]
-  },
-  {
-    "help": "Custom data to send alongside the custom event",
-    "displayName": "Custom Data",
-    "name": "customData",
-    "paramTableColumns": [
-      {
-        "param": {
-          "displayName": "Key",
-          "simpleValueType": true,
-          "name": "key",
-          "type": "TEXT"
-        },
-        "isUnique": true
-      },
-      {
-        "param": {
-          "displayName": "Value",
-          "simpleValueType": true,
-          "name": "value",
-          "type": "TEXT"
-        },
-        "isUnique": false
+        "type": "NON_EMPTY"
       }
     ],
-    "type": "PARAM_TABLE"
+    "displayName": "Coveo Analytics API Key",
+    "simpleValueType": true,
+    "name": "apiKey",
+    "type": "TEXT"
+  },
+  {
+    "displayName": "Analytics Endpoint URL",
+    "defaultValue": "usageanalytics.cloud.coveo.com",
+    "simpleValueType": true,
+    "name": "analyticsEndpoint",
+    "type": "TEXT"
+  },
+  {
+    "help": "The version of the script to load",
+    "valueValidators": [
+      {
+        "args": [
+          "\\d\\.\\d"
+        ],
+        "errorMessage": "You must use the format \"MAJOR.MINOR\". Ex: 1.0",
+        "type": "REGEX"
+      }
+    ],
+    "displayName": "Script Version",
+    "defaultValue": 1,
+    "simpleValueType": true,
+    "name": "scriptVersion",
+    "type": "TEXT"
   }
 ]
 
@@ -214,6 +154,45 @@ ___WEB_PERMISSIONS___
                 "mapValue": [
                   {
                     "type": 1,
+                    "string": "coveoua.t"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
                     "string": "coveoua.q"
                   },
                   {
@@ -243,46 +222,26 @@ ___WEB_PERMISSIONS___
   {
     "instance": {
       "key": {
-        "publicId": "get_referrer",
+        "publicId": "inject_script",
         "versionId": "1"
       },
       "param": [
         {
-          "key": "urlParts",
+          "key": "urls",
           "value": {
-            "type": 1,
-            "string": "any"
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "https://static.cloud.coveo.com/coveo.analytics.js/*"
+              }
+            ]
           }
         }
       ]
     },
-    "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "read_title",
-        "versionId": "1"
-      },
-      "param": []
-    },
-    "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "get_url",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "urlParts",
-          "value": {
-            "type": 1,
-            "string": "any"
-          }
-        }
-      ]
+    "clientAnnotations": {
+      "isEditedByUser": true
     },
     "isRequired": true
   }
@@ -292,35 +251,25 @@ ___WEB_PERMISSIONS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 var log = require('logToConsole');
-var getUrl = require("getUrl");
-var getReferrerUrl = require("getReferrerUrl");
-var readTitle = require("readTitle");
-
-const customDataObject = (data.customData || []).reduce((all, row) => {
-  all[row.key] = row.value;
-  return all;
-}, {});
-
-const customEvent = {
-  eventType: data.eventType,
-  eventValue: data.eventValue,
-  location: data.location || getUrl(),
-  referrer: data.referrer || getReferrerUrl(),
-  language: data.language,
-  title: data.title || readTitle(),
-  anonymous: data.isAnonymous,
-  customData: customDataObject
-};
-
-log('Coveo Analytics Custom Data =', customEvent);
+var injectScript = require("injectScript");
+var callInWindow = require("callInWindow");
+var setInWindow = require("setInWindow");
+var copyFromWindow = require("copyFromWindow");
 
 const createArgumentsQueue = require('createArgumentsQueue');
 const coveoua = createArgumentsQueue('coveoua', 'coveoua.q');
-coveoua("send", "custom", customEvent);
+const getTimestamp = require('getTimestamp');
+setInWindow('coveoua.t', getTimestamp(), true);
 
-data.gtmOnSuccess();
+coveoua("init", data.apiKey, data.analyticsEndpoint);
+coveoua("onLoad", function() {
+  log('Coveo Analytics Initialized');
+});
+
+var url = "https://static.cloud.coveo.com/coveo.analytics.js/" + data.scriptVersion + "/coveoua.js";
+injectScript(url, data.gtmOnSuccess, data.gtmOnError, url);
 
 
 ___NOTES___
 
-Created on 5/24/2019, 1:54:04 PM
+Created on 5/24/2019, 3:47:36 PM

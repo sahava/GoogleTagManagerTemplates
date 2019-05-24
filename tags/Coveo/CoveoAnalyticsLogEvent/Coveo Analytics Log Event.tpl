@@ -1,8 +1,8 @@
 ﻿___INFO___
 
 {
-  "displayName": "Log Coveo Page View",
-  "description": "Logs a Coveo Page View event in Coveo Cloud",
+  "displayName": "Coveo Analytics Log Event",
+  "description": "Logs an analytics event in Coveo Cloud",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
@@ -22,8 +22,32 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "displayName": "Document Tagging",
-    "name": "Document Tagging for Coveo",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "displayValue": "Custom",
+        "value": "custom"
+      },
+      {
+        "displayValue": "View",
+        "value": "view"
+      }
+    ],
+    "displayName": "Event Type",
+    "simpleValueType": true,
+    "name": "eventType",
+    "type": "SELECT"
+  },
+  {
+    "enablingConditions": [
+      {
+        "paramName": "eventType",
+        "type": "EQUALS",
+        "paramValue": "view"
+      }
+    ],
+    "displayName": "View Event Metadata",
+    "name": "View Event Metadata",
     "groupStyle": "ZIPPY_OPEN",
     "type": "GROUP",
     "subParams": [
@@ -50,6 +74,45 @@ ___TEMPLATE_PARAMETERS___
         "displayName": "Content ID Value",
         "simpleValueType": true,
         "name": "contentIdValue",
+        "type": "TEXT"
+      }
+    ]
+  },
+  {
+    "enablingConditions": [
+      {
+        "paramName": "eventType",
+        "type": "EQUALS",
+        "paramValue": "custom"
+      }
+    ],
+    "displayName": "Custom Event Metadata",
+    "name": "Custom Event Metadata",
+    "groupStyle": "ZIPPY_OPEN",
+    "type": "GROUP",
+    "subParams": [
+      {
+        "help": "",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Event Type",
+        "simpleValueType": true,
+        "name": "customEventType",
+        "type": "TEXT"
+      },
+      {
+        "help": "",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Event Value",
+        "simpleValueType": true,
+        "name": "customEventValue",
         "type": "TEXT"
       }
     ]
@@ -84,7 +147,6 @@ ___TEMPLATE_PARAMETERS___
       {
         "help": "(Optional) Boolean representing whether the current visit is from an anonymous user.",
         "displayName": "Is Anonymous",
-        "defaultValue": false,
         "simpleValueType": true,
         "name": "isAnonymous",
         "type": "TEXT"
@@ -92,8 +154,8 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "help": "Custom data to send alongside Page View events",
-    "displayName": "Additional Custom Data",
+    "help": "Custom data to send alongside the custom event",
+    "displayName": "Custom Data",
     "name": "customData",
     "paramTableColumns": [
       {
@@ -230,6 +292,45 @@ ___WEB_PERMISSIONS___
                     "boolean": false
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "coveoua.t"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
               }
             ]
           }
@@ -292,37 +393,56 @@ ___WEB_PERMISSIONS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-var log = require('logToConsole');
-var callInWindow = require("callInWindow");
-var getUrl = require("getUrl");
-var getReferrerUrl = require("getReferrerUrl");
-var readTitle = require("readTitle");
+const log = require('logToConsole');
+
+const addToObject = (obj, obj2) => {
+  for (let key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      obj[key] = obj2[key];
+    }
+  }
+  return obj;
+};
+
+const getUrl = require("getUrl");
+const getReferrerUrl = require("getReferrerUrl");
+const readTitle = require("readTitle");
 
 const customDataObject = (data.customData || []).reduce((all, row) => {
   all[row.key] = row.value;
   return all;
 }, {});
 
-const pageViewData = {
+const eventData = {
   location: data.location || getUrl(),
   referrer: data.referrer || getReferrerUrl(),
   language: data.language,
   title: data.title || readTitle(),
-  contentIdKey: data.contentIdKey,
-  contentIdValue: data.contentIdValue,
   anonymous: data.isAnonymous,
   customData: customDataObject
 };
 
-log('Coveo Analytics View Data =', pageViewData);
+if (data.eventType === "view") {
+  addToObject(eventData, {
+    contentIdKey: data.contentIdKey,
+    contentIdValue: data.contentIdValue,
+  });
+} else if (data.eventType === "custom") {
+  addToObject(eventData, {
+    eventType: data.eventType,
+    eventValue: data.eventValue,
+  });
+}
+
+log('Coveo Analytics Data =', eventData);
 
 const createArgumentsQueue = require('createArgumentsQueue');
 const coveoua = createArgumentsQueue('coveoua', 'coveoua.q');
-coveoua("send", "view", pageViewData);
+coveoua("send", data.eventType, eventData);
 
 data.gtmOnSuccess();
 
 
 ___NOTES___
 
-Created on 5/24/2019, 1:55:47 PM
+Created on 5/24/2019, 3:48:21 PM
