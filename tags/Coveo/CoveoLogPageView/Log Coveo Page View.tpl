@@ -180,15 +180,54 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": false
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
+                    "boolean": true
                   },
                   {
                     "type": 8,
                     "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "coveoua.q"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   }
                 ]
               }
@@ -277,11 +316,13 @@ const pageViewData = {
 
 log('Coveo Analytics View Data =', pageViewData);
 
-callInWindow("coveoua", "send", "view", pageViewData);
+const createArgumentsQueue = require('createArgumentsQueue');
+const coveoua = createArgumentsQueue('coveoua', 'coveoua.q');
+coveoua("send", "view", pageViewData);
 
 data.gtmOnSuccess();
 
 
 ___NOTES___
 
-Created on 5/24/2019, 11:28:01 AM
+Created on 5/24/2019, 1:55:47 PM

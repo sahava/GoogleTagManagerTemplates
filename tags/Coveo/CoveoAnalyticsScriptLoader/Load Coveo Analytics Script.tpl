@@ -115,45 +115,6 @@ ___WEB_PERMISSIONS___
                 "mapValue": [
                   {
                     "type": 1,
-                    "string": "coveoua.q"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  }
-                ]
-              },
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "key"
-                  },
-                  {
-                    "type": 1,
-                    "string": "read"
-                  },
-                  {
-                    "type": 1,
-                    "string": "write"
-                  },
-                  {
-                    "type": 1,
-                    "string": "execute"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
                     "string": "coveoua"
                   },
                   {
@@ -166,7 +127,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   }
                 ]
               },
@@ -193,19 +154,58 @@ ___WEB_PERMISSIONS___
                 "mapValue": [
                   {
                     "type": 1,
-                    "string": "coveoua.q.push"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
+                    "string": "coveoua.t"
                   },
                   {
                     "type": 8,
                     "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "coveoua.q"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   }
                 ]
               }
@@ -256,22 +256,20 @@ var callInWindow = require("callInWindow");
 var setInWindow = require("setInWindow");
 var copyFromWindow = require("copyFromWindow");
 
-var coveoua = copyFromWindow("coveoua") || function() {
-  log("Coveo Analytics Queued =", arguments);
-  callInWindow("coveoua.q.push", arguments);
-};
-setInWindow("coveoua", coveoua);
-setInWindow("coveoua.q", copyFromWindow("coveoua.q") || []);
+const createArgumentsQueue = require('createArgumentsQueue');
+const coveoua = createArgumentsQueue('coveoua', 'coveoua.q');
+const getTimestamp = require('getTimestamp');
+setInWindow('coveoua.t', getTimestamp(), true);
 
-callInWindow("coveoua", "init", data.apiKey, data.analyticsEndpoint);
-callInWindow("coveoua", "onLoad", function() {
+coveoua("init", data.apiKey, data.analyticsEndpoint);
+coveoua("onLoad", function() {
   log('Coveo Analytics Initialized');
 });
 
 var url = "https://static.cloud.coveo.com/coveo.analytics.js/" + data.scriptVersion + "/coveoua.js";
-injectScript(url, data.gtmOnSuccess, data.gtmOnError);
+injectScript(url, data.gtmOnSuccess, data.gtmOnError, url);
 
 
 ___NOTES___
 
-Created on 5/24/2019, 11:27:47 AM
+Created on 5/24/2019, 1:56:12 PM

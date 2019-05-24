@@ -179,15 +179,54 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": false
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
+                    "boolean": true
                   },
                   {
                     "type": 8,
                     "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "coveoua.q"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   }
                 ]
               }
@@ -253,7 +292,6 @@ ___WEB_PERMISSIONS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 var log = require('logToConsole');
-var callInWindow = require("callInWindow");
 var getUrl = require("getUrl");
 var getReferrerUrl = require("getReferrerUrl");
 var readTitle = require("readTitle");
@@ -276,11 +314,13 @@ const customEvent = {
 
 log('Coveo Analytics Custom Data =', customEvent);
 
-callInWindow("coveoua", "send", "custom", customEvent);
+const createArgumentsQueue = require('createArgumentsQueue');
+const coveoua = createArgumentsQueue('coveoua', 'coveoua.q');
+coveoua("send", "custom", customEvent);
 
 data.gtmOnSuccess();
 
 
 ___NOTES___
 
-Created on 5/24/2019, 11:27:53 AM
+Created on 5/24/2019, 1:54:04 PM
