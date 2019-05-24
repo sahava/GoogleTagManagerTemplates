@@ -429,8 +429,8 @@ if (data.eventType === "view") {
   });
 } else if (data.eventType === "custom") {
   addToObject(eventData, {
-    eventType: data.eventType,
-    eventValue: data.eventValue,
+    eventType: data.customEventType,
+    eventValue: data.customEventValue,
   });
 }
 
@@ -445,4 +445,4 @@ data.gtmOnSuccess();
 
 ___NOTES___
 
-Created on 5/24/2019, 3:48:21 PM
+Created on 5/24/2019, 4:21:12 PM
