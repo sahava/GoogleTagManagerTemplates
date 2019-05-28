@@ -124,6 +124,18 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "subParams": [
       {
+        "help": "The current language of the page's content. If not properly detected, will fallback on \"en\".",
+        "displayName": "Language",
+        "simpleValueType": true,
+        "name": "language",
+        "type": "TEXT",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ]
+      },
+      {
         "help": "(Optional) The current URL of the page. If not set, \"window.location\" will be used.",
         "displayName": "Location",
         "simpleValueType": true,
@@ -135,13 +147,6 @@ ___TEMPLATE_PARAMETERS___
         "displayName": "Title",
         "simpleValueType": true,
         "name": "title",
-        "type": "TEXT"
-      },
-      {
-        "help": "(Optional) The current language of the page's content. If not set, will use the language set on the document.",
-        "displayName": "Language",
-        "simpleValueType": true,
-        "name": "language",
         "type": "TEXT"
       },
       {
@@ -416,7 +421,7 @@ const customDataObject = (data.customData || []).reduce((all, row) => {
 const eventData = {
   location: data.location || getUrl(),
   referrer: data.referrer || getReferrerUrl(),
-  language: data.language,
+  language: data.language || "en",
   title: data.title || readTitle(),
   anonymous: data.isAnonymous,
   customData: customDataObject
@@ -445,4 +450,4 @@ data.gtmOnSuccess();
 
 ___NOTES___
 
-Created on 5/24/2019, 4:21:12 PM
+Created on 5/24/2019, 4:26:46 PM
