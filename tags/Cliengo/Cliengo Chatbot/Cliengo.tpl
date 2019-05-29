@@ -167,21 +167,11 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 // Introduzca aquí su código de plantilla.
 var log = require('logToConsole');
-const copyFromWindow = require('copyFromWindow');
-const setInWindow = require('setInWindow');
 const injectScript = require('injectScript');
 const companyId = data.companyId;
 const websiteId = data.websiteId;
 const url = 'https://s.cliengo.com/weboptimizer/'+companyId+'/'+websiteId+'.js';
 
-const setClgo = setInWindow('ldk', function() {
-  const document = copyFromWindow('document');
-  var ldk= document.createElement('script');
-  ldk.type='text/javascript'; 
-  ldk.async=true;
-  ldk.src=url;
-  var s=document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ldk, s);
-  });
 // Ejecute data.gtmOnSuccess cuando la etiqueta haya finalizado.
 injectScript(url, data.gtmOnSuccess, data.gtmOnFailure, url);
 
