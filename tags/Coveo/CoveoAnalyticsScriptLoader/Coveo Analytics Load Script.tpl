@@ -22,6 +22,7 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "help": "For more information on how to create an API key in Coveo Cloud, follow the link here: \n<a href=\"https://docs.coveo.com/en/1718/cloud-v2-administrators/manage-api-keys#add-an-api-key\">Coveo Cloud - Manage API Keys - Add an API key</a>",
     "valueValidators": [
       {
         "type": "NON_EMPTY"
@@ -33,11 +34,22 @@ ___TEMPLATE_PARAMETERS___
     "type": "TEXT"
   },
   {
+    "macrosInSelect": true,
+    "selectItems": [
+      {
+        "displayValue": "Coveo Cloud",
+        "value": "https://usageanalytics.coveo.com"
+      },
+      {
+        "displayValue": "Coveo Cloud (HIPAA)",
+        "value": "https://usageanalyticshipaa.cloud.coveo.com"
+      }
+    ],
     "displayName": "Analytics Endpoint URL",
-    "defaultValue": "usageanalytics.cloud.coveo.com",
+    "defaultValue": "https://usageanalytics.coveo.com",
     "simpleValueType": true,
     "name": "analyticsEndpoint",
-    "type": "TEXT"
+    "type": "SELECT"
   },
   {
     "help": "The version of the script to load",
@@ -272,4 +284,4 @@ injectScript(url, data.gtmOnSuccess, data.gtmOnError, url);
 
 ___NOTES___
 
-Created on 5/24/2019, 3:47:36 PM
+Created on 5/29/2019, 11:18:56 AM
