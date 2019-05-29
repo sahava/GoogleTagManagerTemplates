@@ -125,15 +125,15 @@ ___TEMPLATE_PARAMETERS___
     "subParams": [
       {
         "help": "The current language of the page's content. If not properly detected, will fallback on \"en\".",
-        "displayName": "Language",
-        "simpleValueType": true,
-        "name": "language",
-        "type": "TEXT",
         "valueValidators": [
           {
             "type": "NON_EMPTY"
           }
-        ]
+        ],
+        "displayName": "Language",
+        "simpleValueType": true,
+        "name": "language",
+        "type": "TEXT"
       },
       {
         "help": "(Optional) The current URL of the page. If not set, \"window.location\" will be used.",
@@ -159,30 +159,25 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "help": "Custom data to send alongside the custom event",
-    "displayName": "Custom Data",
+    "type": "SIMPLE_TABLE",
     "name": "customData",
-    "paramTableColumns": [
+    "displayName": "Custom Data",
+    "simpleTableColumns": [
       {
-        "param": {
-          "displayName": "Key",
-          "simpleValueType": true,
-          "name": "key",
-          "type": "TEXT"
-        },
+        "defaultValue": "",
+        "displayName": "Key",
+        "name": "key",
+        "type": "TEXT",
         "isUnique": true
       },
       {
-        "param": {
-          "displayName": "Value",
-          "simpleValueType": true,
-          "name": "value",
-          "type": "TEXT"
-        },
-        "isUnique": false
+        "defaultValue": "",
+        "displayName": "Value",
+        "name": "value",
+        "type": "TEXT"
       }
     ],
-    "type": "PARAM_TABLE"
+    "help": "Custom data to send alongside the custom event"
   }
 ]
 
@@ -413,15 +408,13 @@ const getUrl = require("getUrl");
 const getReferrerUrl = require("getReferrerUrl");
 const readTitle = require("readTitle");
 
-const customDataObject = (data.customData || []).reduce((all, row) => {
-  all[row.key] = row.value;
-  return all;
-}, {});
+const makeTableMap = require('makeTableMap');
+const customDataObject = data.customData ? makeTableMap(data.customData, 'key', 'value') : {};
 
 const eventData = {
   location: data.location || getUrl(),
   referrer: data.referrer || getReferrerUrl(),
-  language: data.language || "en",
+  language: data.language,
   title: data.title || readTitle(),
   anonymous: data.isAnonymous,
   customData: customDataObject
@@ -450,4 +443,4 @@ data.gtmOnSuccess();
 
 ___NOTES___
 
-Created on 5/24/2019, 4:26:46 PM
+Created on 5/29/2019, 7:37:21 AM
