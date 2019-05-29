@@ -166,7 +166,7 @@ ___WEB_PERMISSIONS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 // Introduzca aquí su código de plantilla.
-var log = require('logToConsole');
+const log = require('logToConsole');
 const injectScript = require('injectScript');
 const companyId = data.companyId;
 const websiteId = data.websiteId;
