@@ -124,7 +124,7 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "subParams": [
       {
-        "help": "The current language of the page's content. If not properly detected, will fallback on \"en\".",
+        "help": "The current language of the page's content.",
         "valueValidators": [
           {
             "type": "NON_EMPTY"
@@ -159,25 +159,32 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "type": "SIMPLE_TABLE",
-    "name": "customData",
-    "displayName": "Custom Data",
-    "simpleTableColumns": [
+    "type": "GROUP",
+    "name": "Custom Data",
+    "displayName": "Custom data",
+    "groupStyle": "ZIPPY_OPEN",
+    "subParams": [
       {
-        "defaultValue": "",
-        "displayName": "Key",
-        "name": "key",
-        "type": "TEXT",
-        "isUnique": true
-      },
-      {
-        "defaultValue": "",
-        "displayName": "Value",
-        "name": "value",
-        "type": "TEXT"
+        "displayName": "",
+        "name": "customData",
+        "simpleTableColumns": [
+          {
+            "defaultValue": "",
+            "displayName": "Key",
+            "name": "key",
+            "isUnique": true,
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "Value",
+            "name": "value",
+            "type": "TEXT"
+          }
+        ],
+        "type": "SIMPLE_TABLE"
       }
-    ],
-    "help": "Custom data to send alongside the custom event"
+    ]
   }
 ]
 
@@ -443,4 +450,4 @@ data.gtmOnSuccess();
 
 ___NOTES___
 
-Created on 5/29/2019, 7:37:21 AM
+Created on 5/29/2019, 8:01:14 AM
