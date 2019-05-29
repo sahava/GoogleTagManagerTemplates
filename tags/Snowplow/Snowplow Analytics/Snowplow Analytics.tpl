@@ -702,8 +702,8 @@ const getTrackerConfiguration = () => {
     contexts: {
       webPage: getProp('webPage'),
       performanceTiming: getProp('performanceTiming'),
-	  gaCookies: getProp('gaCookies'),
-	  geolocation: getProp('geolocation'),
+      gaCookies: getProp('gaCookies'),
+      geolocation: getProp('geolocation'),
       augurIdentityLite: getProp('augurIdentityLite'),
       optimizelyExperiments: getProp('optimizelyExperiments'),
       optimizelyStates: getProp('optimizelyStates'),
@@ -739,16 +739,13 @@ if (!config) {
   return data.gtmOnFailure();
 }
 
-
 // Create a new tracker and fire the pageview
 tracker('newTracker', trackerName, endpoint, config);
 tracker('trackPageView');
 
 injectScript(libUrl, data.gtmOnSuccess, data.gtmOnFailure, 'splibrary');
 
-data.gtmOnSuccess();
-
 
 ___NOTES___
 
-Created on 29/05/2019, 17:41:28
+Created on 29/05/2019, 18:29:40
