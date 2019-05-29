@@ -7,7 +7,7 @@ Coveo (https://github.com/coveo).
 # Release notes
 | Date | Notes |
 |------|-------|
-| 24 May 2019 | First version released. |
+| 29 May 2019 | First version released. |
 
 # Details
 
