@@ -53,6 +53,87 @@ ___TEMPLATE_PARAMETERS___
     "valueHint": "e.g. snowplowcollector.cloudfront.net"
   },
   {
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "displayValue": "Page View",
+        "value": "trackPageView"
+      },
+      {
+        "displayValue": "Structured Event",
+        "value": "trackStructEvent"
+      }
+    ],
+    "displayName": "Event Type",
+    "simpleValueType": true,
+    "name": "eventType",
+    "type": "SELECT"
+  },
+  {
+    "enablingConditions": [
+      {
+        "paramName": "eventType",
+        "type": "EQUALS",
+        "paramValue": "trackStructEvent"
+      }
+    ],
+    "displayName": "Structured Event Parameters",
+    "name": "structEventConfig",
+    "groupStyle": "ZIPPY_OPEN",
+    "type": "GROUP",
+    "subParams": [
+      {
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Event Category",
+        "simpleValueType": true,
+        "name": "structEventCategory",
+        "type": "TEXT"
+      },
+      {
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Event Action",
+        "simpleValueType": true,
+        "name": "structEventAction",
+        "type": "TEXT"
+      },
+      {
+        "displayName": "Event Label",
+        "simpleValueType": true,
+        "name": "structEventLabel",
+        "type": "TEXT"
+      },
+      {
+        "displayName": "Event Property",
+        "simpleValueType": true,
+        "name": "structEventProperty",
+        "type": "TEXT"
+      },
+      {
+        "valueValidators": [
+          {
+            "args": [
+              "^[0-9]+(\\.[0-9]+)?$"
+            ],
+            "errorMessage": "Event Value must be a float, e.g. 13.5.",
+            "type": "REGEX"
+          }
+        ],
+        "displayName": "Event Value",
+        "simpleValueType": true,
+        "name": "structEventValue",
+        "type": "TEXT"
+      }
+    ]
+  },
+  {
     "displayName": "Tracker Configuration Parameters",
     "name": "trackerConfiguration",
     "groupStyle": "ZIPPY_CLOSED",
@@ -594,6 +675,84 @@ ___WEB_PERMISSIONS___
                     "boolean": false
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "_snowplow_trackers"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "snowplow.q.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }
@@ -655,8 +814,9 @@ ___WEB_PERMISSIONS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const createQueue = require('createQueue');
-const createArgumentsQueue = require('createArgumentsQueue');
 const copyFromWindow = require('copyFromWindow');
+const setInWindow = require('setInWindow');
+const callInWindow = require('callInWindow');
 const injectScript = require('injectScript');
 const makeInteger = require('makeInteger');
 const makeTableMap = require('makeTableMap');
@@ -667,6 +827,10 @@ const globalName = data.globalName;
 const libUrl = data.useHosted ? 'https://d1fc8wv8zag5ca.cloudfront.net/' + data.libVersion + '/sp.js' : data.selfHostedUrl;
 const trackerName = data.trackerName;
 const endpoint = data.collectorEndpoint;
+
+// Creaete a list of initialized trackers
+const trackerListGlobalName = '_snowplow_trackers';
+const trackerList = createQueue(trackerListGlobalName);
 
 // Build a map of the tracker parameter override table if present
 const configMap = data.trackerParamsOverride && makeTableMap(data.trackerParamsOverride, 'name', 'value');
@@ -727,7 +891,12 @@ const getSp = () => {
 
   const globalNamespace = createQueue('GlobalSnowplowNamespace');
   globalNamespace(globalName);
-  createArgumentsQueue(globalName, globalName + '.q');
+  // Can't use createArgumentsQueue here since the Snowplow tracker library
+  // does not work with GTM's wrapper
+  setInWindow(globalName, function() {
+    callInWindow('snowplow.q.push', arguments);
+  });
+  createQueue('snowplow.q');
   return copyFromWindow(globalName);
 };
 
@@ -739,13 +908,26 @@ if (!config) {
   return data.gtmOnFailure();
 }
 
-// Create a new tracker and fire the pageview
-tracker('newTracker', trackerName, endpoint, config);
-tracker('trackPageView');
+// Only initialize the tracker if it hasn't been initialized yet
+if (copyFromWindow(trackerListGlobalName).indexOf(trackerName) === -1) {
+  tracker('newTracker', trackerName, endpoint, config);
+  trackerList(trackerName);
+}
+
+// Send the event to Snowplow
+tracker(
+  data.eventType,
+  data.structEventCategory,
+  data.structEventAction,
+  data.structEventLabel,
+  data.structEventProperty,
+  data.structEventValue
+);
 
 injectScript(libUrl, data.gtmOnSuccess, data.gtmOnFailure, 'splibrary');
 
 
+
 ___NOTES___
 
-Created on 29/05/2019, 18:29:40
+Created on 30/05/2019, 20:57:02
