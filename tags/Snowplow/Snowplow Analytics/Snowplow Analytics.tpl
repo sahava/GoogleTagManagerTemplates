@@ -40,7 +40,7 @@ ___TEMPLATE_PARAMETERS___
     "valueValidators": [
       {
         "args": [
-          "^[a-z0-9.]+$"
+          "^[a-z0-9.:]+$"
         ],
         "errorMessage": "The endpoint URL must be a valid hostname.",
         "type": "REGEX"
