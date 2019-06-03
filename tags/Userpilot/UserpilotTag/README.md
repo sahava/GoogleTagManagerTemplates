@@ -1,5 +1,5 @@
 # Userpilot
-This is an **unnofficial** template for Userpilot.
+This is an **unofficial** template for Userpilot.
 
 # Author
 Simo Ahava (https://www.simoahava.com/).

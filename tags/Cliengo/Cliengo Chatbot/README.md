@@ -1,5 +1,5 @@
 # Cliengo Chatbot
-This is an **unnofficial** chatbot loader template for Cliengo.
+This is an **unofficial** chatbot loader template for Cliengo.
 
 # Author
 Ezequiel Boehler (www.linkedin.com/in/ezequiel-boehler-1b01783b).

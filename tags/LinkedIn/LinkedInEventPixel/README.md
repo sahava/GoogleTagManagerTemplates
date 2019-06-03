@@ -1,5 +1,5 @@
 # LinkedIn Event Pixel
-This is an **unnofficial** event pixel for linkedIn.
+This is an **unofficial** event pixel for linkedIn.
 
 # Author
 Kevin Haag / [Bounteous](https://www.bounteous.com/) (https://www.linkedin.com/in/kevalytics/).
