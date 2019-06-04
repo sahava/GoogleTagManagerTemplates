@@ -6,7 +6,7 @@
   "version": 1,
   "securityGroups": [],
   "displayName": "String from array of objects",
-  "author": "Simo Ahava",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX1N0cmluZy1mcm9tLWFycmF5LW9mLW9iamVjdHMtU2ltby1BaGF2YQ==",
   "description": "Create a concatenated string of a key in an array of objects.",
   "containerContexts": [
     "WEB"

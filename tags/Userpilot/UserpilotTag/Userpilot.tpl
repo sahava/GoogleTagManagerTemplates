@@ -3,6 +3,7 @@
 {
   "displayName": "Userpilot",
   "description": "Unofficial tag template for Userpilot.",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX1VzZXJwaWxvdC1TaW1vLUFoYXZh",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",

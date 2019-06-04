@@ -6,7 +6,7 @@
   "version": 1,
   "securityGroups": [],
   "displayName": "Conductrics",
-  "author": "Simo Ahava",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX0NvbmR1Y3RyaWNzLVNpbW8tQWhhdmE=",
   "brand": {
     "id": "brand_dummy",
     "displayName": "Conductrics",

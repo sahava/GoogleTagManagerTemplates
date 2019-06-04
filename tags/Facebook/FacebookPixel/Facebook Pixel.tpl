@@ -2,7 +2,7 @@ ___INFO___
 
 {
   "displayName": "Facebook Pixel",
-  "author": "Simo Ahava",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX0ZhY2Vib29rLVNpbW8tQWhhdmE=",
   "description": "This is an unnofficial Google Tag Manager template for the Facebook Pixel.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
