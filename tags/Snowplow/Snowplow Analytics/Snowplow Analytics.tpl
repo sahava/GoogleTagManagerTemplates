@@ -8,7 +8,7 @@
   "type": "TAG",
   "version": 1,
   "brand": {
-    "displayName": "",
+    "displayName": "Custom Template",
     "id": "brand_dummy"
   },
   "containerContexts": [
@@ -140,327 +140,574 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "subParams": [
       {
+        "displayName": "Tracker Configuration Source",
+        "simpleValueType": true,
+        "name": "trackerConfigurationOption",
+        "type": "RADIO",
+        "radioItems": [
+          {
+            "displayValue": "Use a Snowplow Tracker Configuration Variable",
+            "help": "Use the <strong>Snowplow Tracker Configuration</strong> variable type to set the tracker configuration for this tag.",
+            "value": "useVariable"
+          },
+          {
+            "displayValue": "Set configuration manually",
+            "help": "Edit the tracker configuration directly in this tag.",
+            "value": "useTag"
+          }
+        ]
+      },
+      {
         "notSetText": "Select a Snowplow Tracker Configuration Variable...",
         "help": "You must only select a variable of type <strong>Snowplow Tracker Configuration</strong> or the tag will not work. You can check the <em>Enable Overriding Configuration In This Tag</em> below to override individual fields of the variable with tag-specific configurations.",
         "macrosInSelect": true,
         "selectItems": [],
+        "enablingConditions": [
+          {
+            "paramName": "trackerConfigurationOption",
+            "type": "EQUALS",
+            "paramValue": "useVariable"
+          }
+        ],
+        "valueValidators": [
+          {
+            "errorMessage": "You must choose a Snowplow Tracker Configuration variable.",
+            "type": "NON_EMPTY"
+          }
+        ],
         "displayName": "Snowplow Tracker Configuration Variable",
         "simpleValueType": true,
         "name": "trackerConfigurationVariable",
         "type": "SELECT"
       },
       {
-        "help": "Check this to enable individual Tracker Configuration Parameters set in the tag to override those established in the Snowplow Tracker Configuration Variable.",
-        "defaultValue": false,
-        "simpleValueType": true,
-        "name": "enableOverriding",
-        "checkboxText": "Enable Overriding Configuration In This Tag",
-        "type": "CHECKBOX"
-      },
-      {
         "enablingConditions": [
           {
-            "paramName": "enableOverriding",
+            "paramName": "trackerConfigurationOption",
             "type": "EQUALS",
-            "paramValue": true
+            "paramValue": "useTag"
           }
         ],
-        "displayName": "Tag-specific Parameters",
         "name": "overrideParamsGroup",
-        "groupStyle": "ZIPPY_CLOSED",
+        "groupStyle": "NO_ZIPPY",
         "type": "GROUP",
         "subParams": [
           {
-            "displayName": "You can add <a href=\"https://github.com/snowplow/snowplow/wiki/1-General-parameters-for-the-Javascript-tracker\">General Parameters</a> for the tracker here. You are encouraged to use the <strong>Snowplow Tracker Configuration Variable</strong> primarily, and only override select fields below.",
-            "name": "overrideLabel",
-            "type": "LABEL"
-          },
-          {
-            "enablingConditions": [
+            "displayName": "Application Settings",
+            "name": "trackerParamsApp",
+            "groupStyle": "ZIPPY_OPEN",
+            "type": "GROUP",
+            "subParams": [
               {
-                "paramName": "enableOverriding",
-                "type": "EQUALS",
-                "paramValue": true
-              }
-            ],
-            "name": "trackerParamsOverride",
-            "simpleTableColumns": [
-              {
-                "defaultValue": "",
-                "displayName": "Parameter Name",
-                "name": "name",
-                "isUnique": true,
+                "help": "See <a href=\"https://github.com/snowplow/snowplow/wiki/1-General-parameters-for-the-Javascript-tracker#221-setting-the-application-id\">here</a> for more information.",
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "displayName": "Application ID",
+                "defaultValue": "my-site",
+                "simpleValueType": true,
+                "name": "appId",
                 "type": "TEXT"
               },
               {
-                "defaultValue": "",
-                "displayName": "Parameter Value",
-                "name": "value",
+                "selectItems": [
+                  {
+                    "displayValue": "Web",
+                    "value": "web"
+                  },
+                  {
+                    "displayValue": "Mobile/Tablet",
+                    "value": "mob"
+                  },
+                  {
+                    "displayValue": "Desktop/Laptop/Notebook",
+                    "value": "pc"
+                  },
+                  {
+                    "displayValue": "Server-Side App",
+                    "value": "srv"
+                  },
+                  {
+                    "displayValue": "General App",
+                    "value": "app"
+                  },
+                  {
+                    "displayValue": "Connected TV",
+                    "value": "tv"
+                  },
+                  {
+                    "displayValue": "Games Console",
+                    "value": "cnsl"
+                  },
+                  {
+                    "displayValue": "Internet of Things",
+                    "value": "iot"
+                  },
+                  {
+                    "displayValue": "[Custom]",
+                    "value": "custom"
+                  }
+                ],
+                "displayName": "Platform",
+                "simpleValueType": true,
+                "name": "platform",
+                "type": "SELECT",
+                "subParams": [
+                  {
+                    "alwaysInSummary": false,
+                    "enablingConditions": [
+                      {
+                        "paramName": "platform",
+                        "type": "EQUALS",
+                        "paramValue": "custom"
+                      }
+                    ],
+                    "valueValidators": [
+                      {
+                        "type": "NON_EMPTY"
+                      }
+                    ],
+                    "displayName": "",
+                    "simpleValueType": true,
+                    "name": "customPlatform",
+                    "type": "TEXT"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "displayName": "Privacy",
+            "name": "trackerParamsPrivacy",
+            "groupStyle": "ZIPPY_CLOSED",
+            "type": "GROUP",
+            "subParams": [
+              {
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "displayValue": "True",
+                    "value": true
+                  },
+                  {
+                    "displayValue": "False",
+                    "value": false
+                  }
+                ],
+                "displayName": "Respect \"Do Not Track\"",
+                "simpleValueType": true,
+                "name": "respectDoNotTrack",
+                "type": "SELECT"
+              },
+              {
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "displayValue": "On",
+                    "value": true
+                  },
+                  {
+                    "displayValue": "Off",
+                    "value": false
+                  }
+                ],
+                "displayName": "User Fingerprinting",
+                "defaultValue": false,
+                "simpleValueType": true,
+                "name": "userFingerprint",
+                "type": "SELECT"
+              },
+              {
+                "enablingConditions": [
+                  {
+                    "paramName": "userFingerprint",
+                    "type": "EQUALS",
+                    "paramValue": true
+                  }
+                ],
+                "displayName": "User Fingerprint Seed",
+                "simpleValueType": true,
+                "name": "userFingerprintSeed",
                 "type": "TEXT"
               }
-            ],
-            "type": "SIMPLE_TABLE",
-            "newRowButtonText": "Add Parameter"
-          }
-        ]
-      },
-      {
-        "enablingConditions": [
-          {
-            "paramName": "enableOverriding",
-            "type": "EQUALS",
-            "paramValue": true
-          }
-        ],
-        "displayName": "Contexts",
-        "name": "contexts",
-        "groupStyle": "ZIPPY_CLOSED",
-        "type": "GROUP",
-        "subParams": [
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
-              },
-              {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "webPage",
-            "simpleValueType": true,
-            "name": "webPage",
-            "type": "SELECT"
+            ]
           },
           {
-            "notSetText": "[Inherit]",
-            "selectItems": [
+            "displayName": "Cookie Settings",
+            "name": "trackerParamsCookie",
+            "groupStyle": "ZIPPY_CLOSED",
+            "type": "GROUP",
+            "subParams": [
               {
-                "displayValue": "True",
-                "value": true
+                "alwaysInSummary": false,
+                "selectItems": [
+                  {
+                    "displayValue": "Cookie",
+                    "value": "cookie"
+                  },
+                  {
+                    "displayValue": "Local Storage",
+                    "value": "localStorage"
+                  },
+                  {
+                    "displayValue": "None",
+                    "value": "none"
+                  }
+                ],
+                "displayName": "State Storage Strategy",
+                "simpleValueType": true,
+                "name": "stateStorageStrategy",
+                "type": "SELECT"
               },
               {
-                "displayValue": "False",
-                "value": false
+                "help": "Set to <strong>auto</strong> to have Snowplow write the cookie on the root domain.",
+                "enablingConditions": [
+                  {
+                    "paramName": "stateStorageStrategy",
+                    "type": "EQUALS",
+                    "paramValue": "cookie"
+                  }
+                ],
+                "displayName": "Cookie Domain",
+                "defaultValue": "auto",
+                "simpleValueType": true,
+                "name": "cookieDomain",
+                "type": "TEXT"
+              },
+              {
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "enablingConditions": [
+                  {
+                    "paramName": "stateStorageStrategy",
+                    "type": "EQUALS",
+                    "paramValue": "cookie"
+                  }
+                ],
+                "displayName": "Cookie Name",
+                "defaultValue": "sp",
+                "simpleValueType": true,
+                "name": "cookieName",
+                "type": "TEXT"
+              },
+              {
+                "selectItems": [
+                  {
+                    "displayValue": "2 years",
+                    "value": 63072000
+                  },
+                  {
+                    "displayValue": "1 year",
+                    "value": 31536000
+                  },
+                  {
+                    "displayValue": "6 months",
+                    "value": 15552000
+                  },
+                  {
+                    "displayValue": "3 months",
+                    "value": 7776000
+                  },
+                  {
+                    "displayValue": "1 month",
+                    "value": 2592000
+                  },
+                  {
+                    "displayValue": "7 days",
+                    "value": 604800
+                  },
+                  {
+                    "displayValue": "1 day",
+                    "value": 86400
+                  },
+                  {
+                    "displayValue": "Session",
+                    "value": 0
+                  },
+                  {
+                    "displayValue": "Disable first-party cookie",
+                    "value": -1
+                  },
+                  {
+                    "displayValue": "[Custom lifetime]",
+                    "value": "custom"
+                  }
+                ],
+                "enablingConditions": [
+                  {
+                    "paramName": "stateStorageStrategy",
+                    "type": "EQUALS",
+                    "paramValue": "cookie"
+                  }
+                ],
+                "displayName": "Cookie Lifetime",
+                "simpleValueType": true,
+                "name": "cookieLifetime",
+                "type": "SELECT",
+                "subParams": [
+                  {
+                    "enablingConditions": [
+                      {
+                        "paramName": "cookieLifetime",
+                        "type": "EQUALS",
+                        "paramValue": "custom"
+                      }
+                    ],
+                    "valueValidators": [
+                      {
+                        "type": "POSITIVE_NUMBER"
+                      }
+                    ],
+                    "simpleValueType": true,
+                    "name": "customCookieLifetime",
+                    "type": "TEXT"
+                  }
+                ]
               }
-            ],
-            "displayName": "performanceTiming",
-            "simpleValueType": true,
-            "name": "performanceTiming",
-            "type": "SELECT"
+            ]
           },
           {
-            "notSetText": "[Inherit]",
-            "selectItems": [
+            "displayName": "Dispatching",
+            "name": "trackerParamsHit",
+            "groupStyle": "ZIPPY_CLOSED",
+            "type": "GROUP",
+            "subParams": [
               {
-                "displayValue": "True",
-                "value": true
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "displayValue": "POST",
+                    "value": "post"
+                  },
+                  {
+                    "displayValue": "GET",
+                    "value": "get"
+                  },
+                  {
+                    "displayValue": "Beacon",
+                    "value": "beacon"
+                  }
+                ],
+                "displayName": "Dispatch Method",
+                "simpleValueType": true,
+                "name": "eventMethod",
+                "type": "SELECT"
               },
               {
-                "displayValue": "False",
-                "value": false
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "displayValue": "True",
+                    "value": true
+                  },
+                  {
+                    "displayValue": "False",
+                    "value": false
+                  }
+                ],
+                "displayName": "Encode Into Base64",
+                "simpleValueType": true,
+                "name": "encodeBase64",
+                "type": "SELECT"
+              },
+              {
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
+                "displayName": "Page Unload Pause Length",
+                "defaultValue": 500,
+                "simpleValueType": true,
+                "name": "pageUnloadTimer",
+                "valueUnit": "milliseconds",
+                "type": "TEXT"
+              },
+              {
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "displayValue": "Force HTTPS",
+                    "value": "https"
+                  },
+                  {
+                    "displayValue": "Force HTTP",
+                    "value": "http"
+                  },
+                  {
+                    "displayValue": "Use page protocol",
+                    "value": "none"
+                  }
+                ],
+                "displayName": "Tracker Endpoint Protocol",
+                "defaultValue": "none",
+                "simpleValueType": true,
+                "name": "forceProtocol",
+                "type": "SELECT"
+              },
+              {
+                "enablingConditions": [
+                  {
+                    "paramName": "eventMethod",
+                    "type": "NOT_EQUALS",
+                    "paramValue": "get"
+                  }
+                ],
+                "valueValidators": [
+                  {
+                    "type": "POSITIVE_NUMBER"
+                  }
+                ],
+                "displayName": "Buffer Size",
+                "defaultValue": 1,
+                "simpleValueType": true,
+                "name": "bufferSize",
+                "type": "TEXT"
+              },
+              {
+                "enablingConditions": [
+                  {
+                    "paramName": "eventMethod",
+                    "type": "NOT_EQUALS",
+                    "paramValue": "get"
+                  }
+                ],
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "displayName": "POST Path",
+                "defaultValue": "/com.snowplowanalytics.snowplow/tp2",
+                "simpleValueType": true,
+                "name": "postPath",
+                "type": "TEXT"
+              },
+              {
+                "enablingConditions": [
+                  {
+                    "paramName": "eventMethod",
+                    "type": "NOT_EQUALS",
+                    "paramValue": "get"
+                  }
+                ],
+                "valueValidators": [
+                  {
+                    "type": "POSITIVE_NUMBER"
+                  }
+                ],
+                "displayName": "Maximum POST Payload Size",
+                "defaultValue": 40000,
+                "simpleValueType": true,
+                "name": "maxPostBytes",
+                "valueUnit": "bytes",
+                "type": "TEXT"
               }
-            ],
-            "displayName": "gaCookies",
-            "simpleValueType": true,
-            "name": "gaCookies",
-            "type": "SELECT"
+            ]
           },
           {
-            "notSetText": "[Inherit]",
-            "selectItems": [
+            "displayName": "Predefined Contexts",
+            "name": "trackerParamsContexts",
+            "groupStyle": "ZIPPY_CLOSED",
+            "type": "GROUP",
+            "subParams": [
               {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "webPage",
+                "checkboxText": "webPage",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "geolocation",
-            "simpleValueType": true,
-            "name": "geolocation",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "performanceTiming",
+                "checkboxText": "performanceTiming",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "augurIdentityLite",
-            "simpleValueType": true,
-            "name": "augurIdentityLite",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "gaCookies",
+                "checkboxText": "gaCookies",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyExperiments",
-            "simpleValueType": true,
-            "name": "optimizelyExperiments",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "geolocation",
+                "checkboxText": "geolocation",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyStates",
-            "simpleValueType": true,
-            "name": "optimizelyStates",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "augurIdentityLite",
+                "checkboxText": "augurIdentityLite",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyVariations",
-            "simpleValueType": true,
-            "name": "optimizelyVariations",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "optimizelyExperiments",
+                "checkboxText": "optimizelyExperiments",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyVisitor",
-            "simpleValueType": true,
-            "name": "optimizelyVisitor",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "optimizelyStates",
+                "checkboxText": "optimizelyStates",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyAudiences",
-            "simpleValueType": true,
-            "name": "optimizelyAudiences",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "optimizelyVariations",
+                "checkboxText": "optimizelyVariations",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyDimensions",
-            "simpleValueType": true,
-            "name": "optimizelyDimensions",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "optimizelyVisitor",
+                "checkboxText": "optimizelyVisitor",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelySummary",
-            "simpleValueType": true,
-            "name": "optimizelySummary",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "optimizelyAudiences",
+                "checkboxText": "optimizelyAudiences",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
-              }
-            ],
-            "displayName": "optimizelyXSummary",
-            "simpleValueType": true,
-            "name": "optimizelyXSummary",
-            "type": "SELECT"
-          },
-          {
-            "notSetText": "[Inherit]",
-            "selectItems": [
-              {
-                "displayValue": "True",
-                "value": true
+                "simpleValueType": true,
+                "name": "optimizelyDimensions",
+                "checkboxText": "optimizelyDimensions",
+                "type": "CHECKBOX"
               },
               {
-                "displayValue": "False",
-                "value": false
+                "simpleValueType": true,
+                "name": "optimizelySummary",
+                "checkboxText": "optimizelySummary",
+                "type": "CHECKBOX"
+              },
+              {
+                "simpleValueType": true,
+                "name": "optimizelyXSummary",
+                "checkboxText": "optimizelyXSummary",
+                "type": "CHECKBOX"
+              },
+              {
+                "simpleValueType": true,
+                "name": "parrable",
+                "checkboxText": "parrable",
+                "type": "CHECKBOX"
               }
-            ],
-            "displayName": "parrable",
-            "simpleValueType": true,
-            "name": "parrable",
-            "type": "SELECT"
+            ]
           }
         ]
       }
     ]
   },
   {
-    "displayName": "Advanced Settings",
+    "displayName": "Advanced Configuration",
     "name": "advancedSettings",
     "groupStyle": "ZIPPY_CLOSED",
     "type": "GROUP",
@@ -472,7 +719,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "GROUP",
         "subParams": [
           {
-            "help": "This is the global namespace reserved for the Snowplow tracker.",
+            "help": "This is the global namespace reserved for the Snowplow tracker. <strong>Note!</strong> If you change this from the default \"snowplow\", you must edit template permissions, and change \"snowplow\", \"snowplow.q\", and \"snowplow.q.push\" to match the new global method name.",
             "valueValidators": [
               {
                 "type": "NON_EMPTY"
@@ -832,15 +1079,32 @@ const endpoint = data.collectorEndpoint;
 const trackerListGlobalName = '_snowplow_trackers';
 const trackerList = createQueue(trackerListGlobalName);
 
-// Build a map of the tracker parameter override table if present
-const configMap = data.trackerParamsOverride && makeTableMap(data.trackerParamsOverride, 'name', 'value');
-
-// Helper to fetch a property first from the tag, then from the tracker configuration variable
-const getProp = prop => configMap[prop] || data[prop] || (data.trackerConfigurationVariable && data.trackerConfigurationVariable[prop]);
+// Helper to fetch tracker configuration parameters
+const getProp = prop => {
+  // If using a variable, return the property from that
+  if (data.trackerConfigurationVariable) {
+    return data.trackerConfigurationVariable[prop];
+  }
+  // With specific properties, do some custom mapping
+  switch (prop) {
+    case 'cookieDomain':
+      return data[prop] === 'auto' ? undefined : data[prop];
+    case 'discoverRootDomain':
+      return data.cookieDomain === 'auto';
+    case 'cookieLifetime':
+      return data[prop] !== 'custom' ? data[prop] : data.customCookieLifetime;
+    case 'forceSecureTracker':
+      return data.forceProtocol === 'https';
+    case 'forceUnsecureTracker':
+      return data.forceProtocol === 'http';
+  }
+  // Otherwise just return the user input
+  return data[prop];
+};
 
 // Helper that returns a valid tracker configuration object
 const getTrackerConfiguration = () => {
-  if (!data.enableOverriding && (!data.trackerConfigurationVariable || data.trackerConfigurationVariable.type !== 'snowplow')) {
+  if (data.trackerConfigurationOption === 'useVariable' && data.trackerConfigurationVariable.type !== 'snowplow') {
     return false;
   }
   
@@ -902,7 +1166,7 @@ const getSp = () => {
 
 const tracker = getSp();
 const config = getTrackerConfiguration();
-
+log(config);
 if (!config) {
   log('Snowplow: Could not create a proper tracker configuration object.');
   return data.gtmOnFailure();
@@ -927,7 +1191,6 @@ tracker(
 injectScript(libUrl, data.gtmOnSuccess, data.gtmOnFailure, 'splibrary');
 
 
-
 ___NOTES___
 
-Created on 30/05/2019, 20:57:02
+Created on 05/06/2019, 14:13:33
