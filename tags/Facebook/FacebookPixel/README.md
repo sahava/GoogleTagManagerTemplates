@@ -1,5 +1,5 @@
 # Facebook Pixel
-This is an **unnofficial** conversion pixel template for Facebook.
+This is an **unofficial** conversion pixel template for Facebook.
 
 # Author
 Simo Ahava (https://www.simoahava.com/).
