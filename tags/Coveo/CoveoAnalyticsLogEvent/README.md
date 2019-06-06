@@ -8,16 +8,19 @@ Coveo (https://github.com/coveo).
 | Date | Notes |
 |------|-------|
 | 29 May 2019 | First version released. |
+| 06 June 2019 | Added `Detail View` event type, allow to add context data, and allow to configure the username. |
 
 # Details
 
 First, ensure that you have loaded the Coveo Analytics Script. With either:
-* The official [CoveoAnalyticsScriptLoader](https://github.com/sahava/GoogleTagManagerTemplates/tree/master/tags/Coveo/CoveoAnalyticsScriptLoader)  custom tag (Recommended) 
+
+* The official [CoveoAnalyticsScriptLoader](https://github.com/sahava/GoogleTagManagerTemplates/tree/master/tags/Coveo/CoveoAnalyticsScriptLoader)  custom tag (Recommended)
 * The [coveo.analytics](https://github.com/coveo/coveo.analytics.js) snippet included in your page.
 
 Then, use this template to create a tag to log events into the Coveo Usage Analytics service.
 
-Two types of events are provided:
+The following types of event are supported:
 
 * View
 * Custom
+* Detail View

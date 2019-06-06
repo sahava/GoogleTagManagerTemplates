@@ -31,6 +31,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "displayValue": "View",
         "value": "view"
+      },
+      {
+        "displayValue": "Detail View",
+        "value": "detailView"
       }
     ],
     "displayName": "Event Type",
@@ -75,6 +79,25 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "contentIdValue",
         "type": "TEXT"
+      },
+      {
+        "notSetText": "",
+        "help": "(Optional) The type of content being tracked (see <a href=\"https://docs.coveo.com/en/1744/coveo-machine-learning/coveo-machine-learning-recommendation-content-types\">Coveo Machine Learning Recommendation Content Types</a>).",
+        "macrosInSelect": true,
+        "selectItems": [
+          {
+            "displayValue": "Articles",
+            "value": "articles"
+          },
+          {
+            "displayValue": "Products",
+            "value": "products"
+          }
+        ],
+        "displayName": "Content Type",
+        "simpleValueType": true,
+        "name": "contentType",
+        "type": "SELECT"
       }
     ]
   },
@@ -118,6 +141,129 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
+    "enablingConditions": [
+      {
+        "paramName": "eventType",
+        "type": "EQUALS",
+        "paramValue": "detailView"
+      }
+    ],
+    "displayName": "Detail View Event Metadata",
+    "name": "Detail View Event Metadata",
+    "groupStyle": "ZIPPY_OPEN",
+    "type": "GROUP",
+    "subParams": [
+      {
+        "help": "The name of the field used to trace back the current product or variant in the Coveo Index.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Content ID Key",
+        "defaultValue": "permanentid",
+        "simpleValueType": true,
+        "name": "detailContentIdKey",
+        "type": "TEXT"
+      },
+      {
+        "help": "The value of the field used to trace back the current product or variant in the Coveo Index.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Content ID Value",
+        "simpleValueType": true,
+        "name": "detailContentIdValue",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) The index field associated to the \"parent\" product ID that regroups all variants of a particular product.",
+        "displayName": "Parent ID Key",
+        "simpleValueType": true,
+        "name": "parentIdKey",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) The parent item ID that regroups together all variants of a product.",
+        "displayName": "Parent ID Value",
+        "simpleValueType": true,
+        "name": "parentIdValue",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) The price of the item.",
+        "displayName": "Price",
+        "simpleValueType": true,
+        "name": "price",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) The price after all discounts have been applied.",
+        "displayName": "Discounted Price",
+        "simpleValueType": true,
+        "name": "discountedPrice",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) The amount of time in seconds passed viewing the item.",
+        "displayName": "View Duration",
+        "simpleValueType": true,
+        "name": "viewDuration",
+        "type": "TEXT"
+      },
+      {
+        "notSetText": "None",
+        "help": "(Optional) Used to provide more information that would explain how the user viewed the details of this product.",
+        "macrosInSelect": true,
+        "selectItems": [
+          {
+            "displayValue": "View",
+            "value": "view"
+          },
+          {
+            "displayValue": "Quickview (eg: Modal)",
+            "value": "quickview"
+          },
+          {
+            "displayValue": "Screenshot",
+            "value": "screenshot"
+          },
+          {
+            "displayValue": "Video",
+            "value": "video"
+          }
+        ],
+        "displayName": "Action Cause",
+        "simpleValueType": true,
+        "name": "actionCause",
+        "type": "SELECT"
+      },
+      {
+        "help": "(Optional) The name of the product",
+        "displayName": "Product Name",
+        "simpleValueType": true,
+        "name": "name",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) A list of categories associated with the product",
+        "displayName": "Product Categories",
+        "simpleValueType": true,
+        "name": "categories",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) A list of brands associated with the product",
+        "displayName": "Product Brands",
+        "simpleValueType": true,
+        "name": "brands",
+        "type": "TEXT"
+      }
+    ]
+  },
+  {
     "displayName": "Document Metadata",
     "name": "Document Metadata",
     "groupStyle": "ZIPPY_OPEN",
@@ -155,20 +301,46 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "isAnonymous",
         "type": "TEXT"
+      },
+      {
+        "help": "(Optional) The user name to use to recognize a specific user through multiple visits. Requires an additional \"Impersonate\" privilege on the API Key.",
+        "displayName": "Username",
+        "simpleValueType": true,
+        "name": "username",
+        "type": "TEXT"
+      },
+      {
+        "help": "(Optional) A human-friendly user name that will appear in the Usage Analytics reports, replacing the User Name only for display.",
+        "enablingConditions": [
+          {
+            "paramName": "username",
+            "type": "PRESENT",
+            "paramValue": ""
+          }
+        ],
+        "displayName": "User Display Name",
+        "simpleValueType": true,
+        "name": "userDisplayName",
+        "type": "TEXT"
       }
     ]
   },
   {
-    "type": "GROUP",
+    "help": "Custom Data to be sent alongside the event. This data can then be reused in Coveo Cloud",
+    "displayName": "Custom Data",
     "name": "Custom Data",
-    "displayName": "Custom data",
     "groupStyle": "ZIPPY_OPEN",
+    "type": "GROUP",
     "subParams": [
       {
-        "displayName": "",
-        "name": "customData",
+        "name": "customDataTable",
         "simpleTableColumns": [
           {
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
             "defaultValue": "",
             "displayName": "Key",
             "name": "key",
@@ -176,10 +348,70 @@ ___TEMPLATE_PARAMETERS___
             "type": "TEXT"
           },
           {
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
             "defaultValue": "",
             "displayName": "Value",
             "name": "value",
             "type": "TEXT"
+          },
+          {
+            "selectItems": [
+              {
+                "displayValue": "Usage Analytics Reporting",
+                "value": "usageanalytics"
+              },
+              {
+                "displayValue": "Machine Learning Context",
+                "value": "ml"
+              },
+              {
+                "displayValue": "All",
+                "value": "all"
+              }
+            ],
+            "defaultValue": "usageanalytics",
+            "displayName": "Purpose",
+            "name": "purpose",
+            "type": "SELECT"
+          }
+        ],
+        "type": "SIMPLE_TABLE"
+      },
+      {
+        "name": "customDataObjects",
+        "simpleTableColumns": [
+          {
+            "macrosInSelect": true,
+            "selectItems": [],
+            "valueValidators": [],
+            "defaultValue": "",
+            "displayName": "Object to merge",
+            "name": "object",
+            "type": "SELECT"
+          },
+          {
+            "selectItems": [
+              {
+                "displayValue": "Usage Analytics Reporting",
+                "value": "usageanalytics"
+              },
+              {
+                "displayValue": "Machine Learning Context",
+                "value": "ml"
+              },
+              {
+                "displayValue": "All",
+                "value": "all"
+              }
+            ],
+            "defaultValue": "usageanalytics",
+            "displayName": "Purpose",
+            "name": "purpose",
+            "type": "SELECT"
           }
         ],
         "type": "SIMPLE_TABLE"
@@ -365,6 +597,9 @@ ___WEB_PERMISSIONS___
         }
       ]
     },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
     "isRequired": true
   },
   {
@@ -402,52 +637,128 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const log = require('logToConsole');
 
-const addToObject = (obj, obj2) => {
-  for (let key in obj2) {
-    if (obj2.hasOwnProperty(key)) {
-      obj[key] = obj2[key];
+const addToObject = function(obj) {
+  for (let index in arguments) {
+    const obj2 = arguments[index];
+    for (let key in obj2) {
+      if (obj2.hasOwnProperty(key)) {
+        obj[key] = obj2[key];
+      }
     }
   }
   return obj;
 };
 
+const generateCustomData = () => {
+  const ensureObjectHasContextPrefix = (obj) => {
+    const contextPrefix = "context_";
+    const newObj = {};
+    for (let key in obj) {
+      const newKey = key.indexOf(contextPrefix) === 0 ? key : contextPrefix + key;
+      newObj[newKey] = obj[key];
+    }
+    return newObj;
+  };
+
+  const rowIsForAll = (obj) => obj.purpose === 'all';
+  const rowIsForUA = (obj) => obj.purpose === 'usageanalytics' || rowIsForAll(obj);
+  const rowIsForML = (obj) => obj.purpose === 'ml' || rowIsForAll(obj);
+
+  const customDataObject = {};
+
+  if (!!data.customDataTable && data.customDataTable.length > 0) {
+    const makeSafeTableMap = (table) => {
+      const makeTableMap = require('makeTableMap');
+      return table ? makeTableMap(table, 'key', 'value') : {};
+    };
+
+    const objForUsageAnalytics = makeSafeTableMap(data.customDataTable.filter(rowIsForUA));
+    const objForContext = ensureObjectHasContextPrefix(
+      makeSafeTableMap(data.customDataTable.filter(rowIsForML))
+    );
+    addToObject(customDataObject, 
+                objForUsageAnalytics,
+                objForContext);
+  }
+
+  if (!!data.customDataObjects && data.customDataObjects.length > 0) {
+    const getValidCustomDataObjectsFromArray = (objects) => {
+      return objects.map(row => row.object).filter(obj => typeof obj === 'object');
+    };
+
+    getValidCustomDataObjectsFromArray(data.customDataObjects.filter(rowIsForUA))
+      .forEach(obj => addToObject(customDataObject, obj));
+    getValidCustomDataObjectsFromArray(data.customDataObjects.filter(rowIsForML))
+      .map(ensureObjectHasContextPrefix)
+      .forEach(obj => addToObject(customDataObject, obj));
+  }
+  
+  return customDataObject;
+};
+
+const eventTypeMap = {
+  view: "view",
+  custom: "custom",
+  detailView: "custom"
+};
+
+const eventDataForTypeMap = {
+  view: {
+    contentIdKey: data.contentIdKey,
+    contentIdValue: data.contentIdValue,
+    customData: {}
+  },
+  custom: {
+    eventType: data.customEventType,
+    eventValue: data.customEventValue,
+    customData: {}
+  },
+  detailView: {
+    eventType: "detailView",
+    eventValue: data.detailContentIdValue,
+    customData: {
+      contentIdKey: data.detailContentIdKey,
+      contentIdValue: data.detailContentIdValue,
+      parentIdKey: data.parentIdKey,
+      parentIdValue: data.parentIdValue,
+      price: data.price,
+      discountedPrice: data.discountedPrice,
+      viewDuration: data.viewDuration,
+      actionCause: data.actionCause,
+      name: data.name,
+      categories: data.categories,
+      brands: data.brands
+    }
+  }
+};
+
+const eventDataForType = eventDataForTypeMap[data.eventType];
+addToObject(eventDataForType.customData, generateCustomData());
+
 const getUrl = require("getUrl");
 const getReferrerUrl = require("getReferrerUrl");
 const readTitle = require("readTitle");
-
-const makeTableMap = require('makeTableMap');
-const customDataObject = data.customData ? makeTableMap(data.customData, 'key', 'value') : {};
-
 const eventData = {
   location: data.location || getUrl(),
   referrer: data.referrer || getReferrerUrl(),
   language: data.language,
   title: data.title || readTitle(),
   anonymous: data.isAnonymous,
-  customData: customDataObject
+  username: data.username,
+  userDisplayName: data.userDisplayName
 };
 
-if (data.eventType === "view") {
-  addToObject(eventData, {
-    contentIdKey: data.contentIdKey,
-    contentIdValue: data.contentIdValue,
-  });
-} else if (data.eventType === "custom") {
-  addToObject(eventData, {
-    eventType: data.customEventType,
-    eventValue: data.customEventValue,
-  });
-}
+addToObject(eventData, eventDataForType);
 
 log('Coveo Analytics Data =', eventData);
 
 const createArgumentsQueue = require('createArgumentsQueue');
 const coveoua = createArgumentsQueue('coveoua', 'coveoua.q');
-coveoua("send", data.eventType, eventData);
+coveoua("send", eventTypeMap[data.eventType], eventData);
 
 data.gtmOnSuccess();
 
 
 ___NOTES___
 
-Created on 5/29/2019, 8:01:14 AM
+Created on 6/5/2019, 1:34:13 PM
