@@ -156,16 +156,11 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const injectScript = require('injectScript');
 const setInWindow = require('setInWindow');
 
-const _ac = {};
-if(data.orderValue !== undefined){
-	_ac.value = data.orderValue;
-}
-if(data.productId !== undefined){
-	_ac.product = data.productId;
-}
-if(data.orderId !== undefined){
-	_ac.order_id = data.orderId;
-}
+const _ac = {
+ value: data.orderValue,
+ product: data.productId,
+ order_id: data.orderId
+};
 
 setInWindow('_ac', _ac);
 
