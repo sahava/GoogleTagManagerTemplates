@@ -36,15 +36,15 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "help": "In script referenced as piCId",
-    "displayName": "Pardot Campaign ID",
-    "simpleValueType": true,
-    "name": "piCId",
-    "type": "TEXT",
     "valueValidators": [
       {
         "type": "NON_EMPTY"
       }
-    ]
+    ],
+    "displayName": "Pardot Campaign ID",
+    "simpleValueType": true,
+    "name": "piCId",
+    "type": "TEXT"
   }
 ]
 
@@ -183,14 +183,15 @@ ___WEB_PERMISSIONS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
+// Enter your template code here.
 //var log = require('logToConsole');
 const injectScript = require('injectScript');
 const setInWindow = require('setInWindow');
 
-setInWindow('piAId', data.piAId);
-setInWindow('piCId', data.piCId);
+setInWindow('piAId', data.piAId, true);
+setInWindow('piCId', data.piCId, true);
 
-var trackingUrl = "https://pi.pardot.com/pd.js";
+const trackingUrl = "https://pi.pardot.com/pd.js";
 injectScript(trackingUrl, data.gtmOnSuccess,data.gtmOnFailure);
 
 //log('script =', trackingUrl);
@@ -199,4 +200,4 @@ injectScript(trackingUrl, data.gtmOnSuccess,data.gtmOnFailure);
 
 ___NOTES___
 
-Created on 6/15/2019, 7:06:05 PM
+Created on 6/17/2019, 11:56:45 AM
