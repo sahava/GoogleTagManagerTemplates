@@ -1,5 +1,15 @@
-# Adcrowd Google Tag Manager Template
-This is the template for Adcrowd Smartpixels in Google Tag Manager
+# Adcrowd tracking script
+This is an **unofficial** Pardot tracking script template.
+
+# Author
+Martijn van Vreeden (https://martijnvanvreeden.nl)
+
+# Release notes
+| Date | Notes |
+|------|-------|
+| 17 June 2019 | First version |
+
+# Details
 
 Provides options to add:
 * Pixel ID (required)
