@@ -84,6 +84,67 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_globals",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keys",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "_ac"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
   }
 ]
 
@@ -93,8 +154,9 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 // Enter your template code here.
 //var log = require('logToConsole');
 const injectScript = require('injectScript');
+const setInWindow = require('setInWindow');
 
-var _ac = {};
+const _ac = {};
 if(data.orderValue !== undefined){
 	_ac.value = data.orderValue;
 }
@@ -105,7 +167,9 @@ if(data.orderId !== undefined){
 	_ac.order_id = data.orderId;
 }
 
-var trackingUrl = "https://pixel.adcrowd.com/smartpixel/" + data.pixelId + ".js";
+setInWindow('_ac', _ac);
+
+const trackingUrl = "https://pixel.adcrowd.com/smartpixel/" + data.pixelId + ".js";
 injectScript(trackingUrl, data.gtmOnSuccess,data.gtmOnFailure);
 
 //log('script =', trackingUrl);
@@ -114,4 +178,4 @@ injectScript(trackingUrl, data.gtmOnSuccess,data.gtmOnFailure);
 
 ___NOTES___
 
-Created on 6/15/2019, 6:11:44 PM
+Created on 6/17/2019, 11:57:50 AM
