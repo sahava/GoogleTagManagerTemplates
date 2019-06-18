@@ -1,5 +1,5 @@
 # Adcrowd tracking script
-This is an **unofficial** Pardot tracking script template.
+This is an **unofficial** Adcrowd tracking script template.
 
 # Author
 Martijn van Vreeden (https://martijnvanvreeden.nl)
