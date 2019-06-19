@@ -148,9 +148,9 @@ _urconfig.usePageProtocol = false;
 
 const urconfig = {
  sid: data.sid,
- aip: 0,
- usePageProtocol: false
-};
+ aip: 0, // value is fixed and required
+ usePageProtocol: false // value is fixed and required
+}; 
 
 setInWindow('_urconfig', _urconfig, true);
 
