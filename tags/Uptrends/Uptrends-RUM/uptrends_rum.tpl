@@ -146,12 +146,6 @@ _urconfig.sid = data.sid;
 _urconfig.aip = 0;
 _urconfig.usePageProtocol = false;
 
-const urconfig = {
- sid: data.sid,
- aip: 0, // value is fixed and required
- usePageProtocol: false // value is fixed and required
-}; 
-
 setInWindow('_urconfig', _urconfig, true);
 
 const trackingUrl = "https://hit.uptrendsdata.com/rum.min.js";
