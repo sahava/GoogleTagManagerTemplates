@@ -655,7 +655,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 // Algolia Search Insights Custom Template
 // Google Tag Manager
 // David Vallejo @thyng
-// 2019-06-21
+// 2019-06-22
 
 const log = require('logToConsole');
 const createArgumentsQueue = require('createArgumentsQueue');
@@ -707,7 +707,6 @@ switch (data.eventType) {
         log("GTM-DEBUG :: ALGOLIA >> Algolia INIT", {
             appId: data.appId,
             apiKey: data.apiKey,
-            userToken: '1754521',
             userHasOptedOut: data.userHasOptedOut || false,
             region: data.region || undefined,
             cookieDuration: data.cookieDuration || 15552000000            
@@ -715,7 +714,6 @@ switch (data.eventType) {
         aa('init', {
             appId: data.appId,
             apiKey: data.apiKey,
-            userToken: '1754521',
             userHasOptedOut: data.userHasOptedOut || false,
             region: data.region || undefined,
             cookieDuration: data.cookieDuration || 15552000000            
@@ -801,8 +799,6 @@ switch (data.eventType) {
     default:
         break;
 }
-// Call data.gtmOnSuccess when the tag is finished.
-data.gtmOnSuccess();
 
 
 ___NOTES___
