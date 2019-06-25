@@ -246,23 +246,23 @@ ___TEMPLATE_PARAMETERS___
         "type": "TEXT"
       },
       {
-        "displayName": "Cookie Duration",
-        "simpleValueType": true,
-        "name": "cookieDuration",
-        "type": "TEXT",
         "help": "The value needs to be in milliseconds. Default: 15552000000ms (6 months)",
         "valueValidators": [
           {
             "type": "POSITIVE_NUMBER"
           }
-        ]
+        ],
+        "displayName": "Cookie Duration",
+        "simpleValueType": true,
+        "name": "cookieDuration",
+        "type": "TEXT"
       },
       {
-        "type": "TEXT",
-        "name": "setUserToken",
+        "help": "UserToken will be applied to subsecuent events.",
         "displayName": "Persisten UserToken",
         "simpleValueType": true,
-        "help": "UserToken will be applied to subsecuent events."
+        "name": "setUserToken",
+        "type": "TEXT"
       }
     ]
   },
@@ -655,7 +655,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 // Algolia Search Insights Custom Template
 // Google Tag Manager
 // David Vallejo @thyng
-// 2019-06-22
+// 2019-06-25
 
 const log = require('logToConsole');
 const createArgumentsQueue = require('createArgumentsQueue');
@@ -675,10 +675,10 @@ let algoliaEventParams = {
     index: (data.index) ? data.index : undefined,
     eventName: (data.eventName) ? data.eventName : undefined,
     // Objects IDs needs to be an array with a Max of 20 items.
-    objectIDs: (data.objectIDs) ? data.objectIDs.split(',').slice(0,20) : undefined,
-    filters: (data.filters) ? data.filters.split(',') : undefined,
+    objectIDs: (data.objectIDs) ? data.objectIDs.toString().split(',').slice(0,20) : undefined,
+    filters: (data.filters) ? data.filters.toString().split(',') : undefined,
     queryID: (data.queryID) ? data.queryID : undefined,
-    positions: (data.positions) ? data.positions.split(',').slice(0,20) : undefined
+    positions: (data.positions) ? data.positions.toString().split(',').slice(0,20) : undefined
 };
 
 // Helper function for next sanity checks
@@ -803,4 +803,4 @@ switch (data.eventType) {
 
 ___NOTES___
 
-Created on 21/6/2019 15:06:07
+Created on 25/6/2019 13:46:14
