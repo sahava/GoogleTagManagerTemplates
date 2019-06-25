@@ -1,6 +1,9 @@
 # Custom templates for Google Tag Manager
 In this repository, I intend to collect [custom template files](https://www.simoahava.com/analytics/custom-templates-guide-for-google-tag-manager/) for [Google Tag Manager](https://tagmanager.google.com/).
 
+# License
+The repository itself is released to the public under the [MIT License](https://opensource.org/licenses/MIT). By submitting a template into this repository, you accept that the template will fall under this license, too. You can submit a difference `LICENSE` file in the folder to where you upload your own template, in case you want it to override the default MIT license used in the repo.
+
 # Instructions
 To import a template file into your Google Tag Manager container, follow these steps:
 
