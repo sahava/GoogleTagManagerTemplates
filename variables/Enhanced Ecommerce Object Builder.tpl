@@ -1,4 +1,4 @@
-﻿___INFO___
+___INFO___
 
 {
   "displayName": "Enhanced Ecommerce Object Builder",
@@ -140,11 +140,6 @@ ___TEMPLATE_PARAMETERS___
         "paramName": "eecAction",
         "type": "EQUALS",
         "paramValue": "click"
-      },
-      {
-        "paramName": "eecAction",
-        "type": "EQUALS",
-        "paramValue": "promoClick"
       }
     ],
     "displayName": "Action Data",
@@ -308,11 +303,6 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "enablingConditions": [
-      {
-        "paramName": "eecAction",
-        "type": "EQUALS",
-        "paramValue": "promoClick"
-      },
       {
         "paramName": "eecAction",
         "type": "EQUALS",
@@ -521,7 +511,7 @@ ___TEMPLATE_PARAMETERS___
                 "defaultValue": "",
                 "displayName": "Index",
                 "name": "index",
-                "isUnique": true,
+                "isUnique": false,
                 "type": "TEXT"
               },
               {
@@ -584,7 +574,7 @@ ___TEMPLATE_PARAMETERS___
                 "defaultValue": "",
                 "displayName": "Index",
                 "name": "index",
-                "isUnique": true,
+                "isUnique": false,
                 "type": "TEXT"
               },
               {
@@ -763,7 +753,7 @@ ___TEMPLATE_PARAMETERS___
                 "defaultValue": "",
                 "displayName": "Index",
                 "name": "index",
-                "isUnique": true,
+                "isUnique": false,
                 "type": "TEXT"
               },
               {
@@ -817,7 +807,7 @@ ___TEMPLATE_PARAMETERS___
                 "defaultValue": "",
                 "displayName": "Index",
                 "name": "index",
-                "isUnique": true,
+                "isUnique": false,
                 "type": "TEXT"
               },
               {
@@ -847,6 +837,73 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
+    "enablingConditions": [
+      {
+        "paramName": "eecAction",
+        "type": "EQUALS",
+        "paramValue": "promoClick"
+      }
+    ],
+    "displayName": "Promotions Clicked",
+    "name": "promotionClick",
+    "groupStyle": "ZIPPY_CLOSED",
+    "type": "GROUP",
+    "subParams": [
+      {
+        "displayName": "Promotions",
+        "name": "promoClickData",
+        "groupStyle": "ZIPPY_OPEN",
+        "type": "GROUP",
+        "subParams": [
+          {
+            "name": "promotionsClicked",
+            "simpleTableColumns": [
+              {
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "defaultValue": "",
+                "displayName": "ID",
+                "name": "id",
+                "isUnique": true,
+                "type": "TEXT"
+              },
+              {
+                "defaultValue": "",
+                "displayName": "Name",
+                "name": "name",
+                "type": "TEXT"
+              },
+              {
+                "defaultValue": "",
+                "displayName": "Creative",
+                "name": "creative",
+                "type": "TEXT"
+              },
+              {
+                "defaultValue": "",
+                "displayName": "Position",
+                "name": "position",
+                "type": "TEXT"
+              }
+            ],
+            "type": "SIMPLE_TABLE",
+            "newRowButtonText": "Add Promotion"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "enablingConditions": [
+      {
+        "paramName": "eecAction",
+        "type": "NOT_EQUALS",
+        "paramValue": "promoClick"
+      }
+    ],
     "displayName": "Promotions Viewed",
     "name": "promotionView",
     "groupStyle": "ZIPPY_CLOSED",
@@ -969,18 +1026,29 @@ if (impressions && data.icustomMetrics) {
   });
 }
 
-const promotions = data.promotions;
+const promotionViews = data.promotions;
+const promotionClicks = data.promotionsClicked;
 
 // Build ecommerce object
-if (data.eecType !== 'impressions' && data.eecType !== 'promoView') {
+if (data.eecType !== 'impressions' && data.eecType !== 'promoView' && data.eecType !== 'promoClick') {
   ecommerce[action] = {};
   ecommerce[action].actionField = actionField;
   ecommerce[action].products = products;
 }
+
 ecommerce.impressions = impressions;
-ecommerce.promoView = {
-  promotions: promotions
-};
+
+if (promotionViews) {
+  ecommerce.promoView = {
+    promotions: promotionViews
+  };
+}
+
+if (promotionClicks) {
+  ecommerce.promoClick = {
+    promotions: promotionClicks
+  };
+}
 
 return {
   ecommerce: ecommerce
