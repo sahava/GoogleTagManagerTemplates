@@ -3,6 +3,7 @@
 {
   "displayName": "AppNexus",
   "description": "Unofficial template for creating Conversion and Segment Pixels in for AppNexus.",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX0FwcE5leHVzLVNpbW8tQWhhdmE=",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
