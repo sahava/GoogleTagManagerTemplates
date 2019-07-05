@@ -3,6 +3,7 @@
 {
   "type": "TAG",
   "id": "cvt_temp_public_id",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX0FkU2VydmljZS1TaW1vLUFoYXZh",
   "version": 1,
   "securityGroups": [],
   "displayName": "AdService",
