@@ -3,6 +3,7 @@
 {
   "displayName": "Google Tag Manager Monitor",
   "description": "A template for setting up tag monitoring in Google Tag Manager.",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX0dvb2dsZS1UYWctTWFuYWdlci1Nb25pdG9yLVNpbW8tQWhhdmE=",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
