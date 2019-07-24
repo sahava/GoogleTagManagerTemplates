@@ -29,7 +29,7 @@ ___TEMPLATE_PARAMETERS___
     "valueHint": "Event name fired into dataLayer"
   },
   {
-    "displayName": "",
+    "displayName": "Transaction Parameters",
     "name": "transactionParameters",
     "simpleTableColumns": [
       {
@@ -60,7 +60,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "defaultValue": "",
-        "displayName": "Transaction Parameters",
+        "displayName": "key",
         "name": "name",
         "isUnique": true,
         "type": "SELECT"
