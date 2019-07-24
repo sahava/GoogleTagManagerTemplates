@@ -22,14 +22,48 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "displayName": "Custom Parameters",
-    "name": "customParameters",
+    "displayName": "Event Name",
+    "simpleValueType": true,
+    "name": "event",
+    "type": "TEXT",
+    "valueHint": "Event name fired into dataLayer"
+  },
+  {
+    "displayName": "",
+    "name": "transactionParameters",
     "simpleTableColumns": [
       {
+        "selectItems": [
+          {
+            "displayValue": "transactionId",
+            "value": "transactionId"
+          },
+          {
+            "displayValue": "transactionAffiliation",
+            "value": "transactionAffiliation"
+          },
+          {
+            "displayValue": "transactionTotal",
+            "value": "transactionTotal"
+          },
+          {
+            "displayValue": "transactionTax",
+            "value": "transactionTax"
+          },
+          {
+            "displayValue": "transactionShipping",
+            "value": "transactionShipping"
+          },
+          {
+            "displayValue": "transactionProducts",
+            "value": "transactionProducts"
+          }
+        ],
         "defaultValue": "",
-        "displayName": "key",
+        "displayName": "Transaction Parameters",
         "name": "name",
-        "type": "TEXT"
+        "isUnique": true,
+        "type": "SELECT"
       },
       {
         "defaultValue": "",
@@ -41,57 +75,26 @@ ___TEMPLATE_PARAMETERS___
     "type": "SIMPLE_TABLE"
   },
   {
-    "displayName": "Transaction Parameters",
-    "name": "transactionDropdown",
-    "groupStyle": "ZIPPY_CLOSED",
-    "type": "GROUP",
-    "subParams": [
+    "displayName": "Custom Parameters",
+    "name": "customParameters",
+    "simpleTableColumns": [
       {
-        "displayName": "",
-        "name": "standardParameters",
-        "simpleTableColumns": [
-          {
-            "selectItems": [
-              {
-                "displayValue": "transactionId",
-                "value": "transactionId"
-              },
-              {
-                "displayValue": "transactionAffiliation",
-                "value": "transactionAffiliation"
-              },
-              {
-                "displayValue": "transactionTotal",
-                "value": "transactionTotal"
-              },
-              {
-                "displayValue": "transactionTax",
-                "value": "transactionTax"
-              },
-              {
-                "displayValue": "transactionShipping",
-                "value": "transactionShipping"
-              },
-              {
-                "displayValue": "transactionProducts",
-                "value": "transactionProducts"
-              }
-            ],
-            "defaultValue": "",
-            "displayName": "key",
-            "name": "name",
-            "type": "SELECT"
-          },
-          {
-            "defaultValue": "",
-            "displayName": "value",
-            "name": "value",
-            "type": "TEXT"
-          }
-        ],
-        "type": "SIMPLE_TABLE"
+        "defaultValue": "",
+        "displayName": "key",
+        "name": "name",
+        "isUnique": true,
+        "type": "TEXT",
+        "valueHint": "ie: email, coupon, userId, etc..."
+      },
+      {
+        "defaultValue": "",
+        "displayName": "value",
+        "name": "value",
+        "type": "TEXT",
+        "valueHint": ""
       }
-    ]
+    ],
+    "type": "SIMPLE_TABLE"
   }
 ]
 
@@ -152,84 +155,6 @@ ___WEB_PERMISSIONS___
                 "mapValue": [
                   {
                     "type": 1,
-                    "string": "dataLayerPush"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
-                  }
-                ]
-              },
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "key"
-                  },
-                  {
-                    "type": 1,
-                    "string": "read"
-                  },
-                  {
-                    "type": 1,
-                    "string": "write"
-                  },
-                  {
-                    "type": 1,
-                    "string": "execute"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
-                    "string": "createQueue"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  }
-                ]
-              },
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "key"
-                  },
-                  {
-                    "type": 1,
-                    "string": "read"
-                  },
-                  {
-                    "type": 1,
-                    "string": "write"
-                  },
-                  {
-                    "type": 1,
-                    "string": "execute"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
                     "string": "dataLayer"
                   },
                   {
@@ -264,27 +189,28 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const makeTableMap = require('makeTableMap');
 const query = require('queryPermission');
 const createQueue = require('createQueue');
+const dataLayerPush = createQueue('dataLayer');
+const log = require('logToConsole');
+const event = {'event': data.event};
 const customParameters = data.customParameters ? makeTableMap(data.customParameters, 'name', 'value') : {};
-const standardParameters = data.standardParameters ? makeTableMap(data.standardParameters, 'name', 'value') : {};
-var merge = function() {
-    var obj = {},
-        i = 0,
-        il = arguments.length,
-        key;
-    for (; i < il; i++) {
-        for (key in arguments[i]) {
-            if (arguments[i].hasOwnProperty(key)) {
-                obj[key] = arguments[i][key];
-            }
-        }
+const transactionParameters = data.transactionParameters ? makeTableMap(data.transactionParameters, 'name', 'value') : {};
+const merge = function() {
+  const obj = {},
+        il = arguments.length;
+  let i = 0,
+      key;
+  for (; i < il; i++) {
+    for (key in arguments[i]) {
+      if (arguments[i].hasOwnProperty(key)) {
+        obj[key] = arguments[i][key];
+      }
     }
-    return obj;
+  }
+  return obj;
 };
-var dataLayer = merge(customParameters, standardParameters);
+const dataLayer = merge(event, customParameters, transactionParameters);
 if (query('access_globals', 'readwrite', 'dataLayer')) {
-  const dataLayerPush = createQueue('dataLayer');
   dataLayerPush(dataLayer);
-  var log = require('logToConsole');
   log("data:", dataLayer);
 }
 data.gtmOnSuccess();
