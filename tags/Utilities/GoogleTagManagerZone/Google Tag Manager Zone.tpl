@@ -132,7 +132,7 @@ const onFailure = () => {
   log('Zone Failed ');
   data.gtmOnFailure();
 };
-var url = 'https://www.googletagmanager.com/gtm.js?id='+containerId+'&l='+dataLayerName;
+const url = 'https://www.googletagmanager.com/gtm.js?id='+containerId+'&l='+dataLayerName;
 injectScript(url,onSuccess,onFailure);
 
 
