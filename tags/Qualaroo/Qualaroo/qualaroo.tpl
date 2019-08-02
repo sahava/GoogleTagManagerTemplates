@@ -274,7 +274,7 @@ createQueue('_kiq');
 
 if (data.gaIntegration) {
   const ga = createArgumentsQueue('ga', 'ga.q');
-  ga('create', data.gaTrackingId);
+  ga('create', data.gaTrackingId, 'auto');
 }
 
 injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure, 'qualaroo');
