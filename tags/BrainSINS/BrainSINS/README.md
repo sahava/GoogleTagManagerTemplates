@@ -1,4 +1,4 @@
-# Barilliance
+# BrainSINS
 This is an **unofficial** tag template for BrainSINS.
 
 # Author
