@@ -1,24 +1,25 @@
-# dataLayer Builder w-Standard eCommerce
-
-This is a simple dataLayer builder that allows you to add any custom parameters you want with the dropdown functionality to build Googles Standard Ecommerce dataLayer.
+# dataLayer Builder + Enhanced Ecommerce
+This is the unofficial Google Enhanced Ecommerce dataLayer builder template. Build all of the EE dataLayers using dropdown functionality with the ability to add custom params.
 
 # Author
-
 Michael Ulrich (https://www.wpromote.com/).
 
 # Release Notes
-	
-| Date  | Notes |
+| Date | Notes |
 |-------|-------|
-| 23 July 2019  | First version of the tag released. |
-	
+| 29 August 2019 | First version of the tag released. |
+
 # Description
-This template has three adjustable sections that allows you to add all needed data into your dataLayer. 
+This template has many adjustable fields that allow you to add your data directly into the properly formated EE dataLayer.
 
-The first allows you to set the event that fires the dataLayer. 
+The Event name field allows you to set the event that fires the dataLayer.
 
-The second allows you to push unique custom parameters into your dataLayer. 
+The Event dataLayer field allows you to select the Enhanced Ecommerce dataLayer type that you will push all of your parameters into.
 
-The third allows you to	enable and push Googles Standard Ecommerce parameters into the dataLayer. 
+The Currency Parameter field allows you to add the currency into your dataLayer.
 
-This template merges all the data into one dataLayer.push. 
+The Actionfield Object Parameter field allows you to add any of the standard actionField parameters into your dataLayer.
+
+The Product/Promo Array field allows you to add the product array variable that contains your product data into the dataLayer.
+
+The Custom Parameters field allows you to add any custom parameters into your dataLayer.
