@@ -233,7 +233,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const makeString = require('makeString');
 const inputVar = makeString(data.inputVar);
-const table = data.regexTable;
+const table = data.regexTable || [];
 const defaultValue = data.defaultValue;
 //Advanced Settings Values
 const ignoreCase = data.ignoreCase;
@@ -241,100 +241,49 @@ const fullMatch = data.fullMatch;
 const capRep = data.captureReplace;
 //Format Value Values
 const convertCaseTo = data.convertCaseTo;
-const convertCase = data.convertCase;
-const convertNullTo = data.convertNullTo;
 const convertNull = data.convertNull;
-const convertUndefinedTo = data.convertUndefinedTo;
+const convertNullTo = data.convertNullTo;
 const convertUndefined = data.convertUndefined;
-const convertTrueTo = data.convertTrueTo;
+const convertUndefinedTo = data.convertUndefinedTo;
 const convertTrue = data.convertTrue;
-const convertFalseTo = data.convertFalseTo;
+const convertTrueTo = data.convertTrueTo;
 const convertFalse = data.convertFalse;
-//Declare Variables
-  //If you need to change your default delimter, do it here.
-var val = defaultValue !== undefined ? defaultValue.split('|') : defaultValue,
-    a,
-    b;
-if(typeof(table) !=='undefined'){
-  //Itterate through the table
-  for(a=0;a<table.length;a++){
-    if(ignoreCase===true){
-      //Convert regex and input to lowercase
-      var input = inputVar.toLowerCase(),
-          re = table[a].inputVal.toLowerCase();
-    } else{
-      var input = inputVar,
-          re = table[a].inputVal;
-    }
-    if(input.match(re) !== null){
-      if (fullMatch===true){
-        if(input.match(re)[0]==input){
-          val=[table[a].output1,table[a].output2,table[a].output3];
-          if (capRep === true){
-            val = [table[a].output1,table[a].output2,table[a].output3];
-            for(b=0;b<val.length;b++){
-              if(val[b].match('\\$\\d+') !== null){
-                val[b] = input.match(re)[val[b].match('\\d+')[0]];
-              }
-            }
-          }
-          break;
-        } else {
-          continue;
-        }
-      } else {
-        val = [table[a].output1,table[a].output2,table[a].output3];
-        if (capRep === true){
-          for(a=b;b<val.length;b++){
-            if(val[b].match('\\$\\d+') !== null){
-              val[b] = input.match(re)[val[b].match('\\d+')[0]];
-            }
-          }
-        }
-        break;
-      }
-    }
-  }
-}
+const convertFalseTo = data.convertFalseTo;
+//If you need to change your default delimter, do it here.
+const delimiter = '|';
+const input = ignoreCase ? inputVar.toLowerCase() : inputVar;
 
-if (val !== undefined){
-  //Convert variables
-  for(a=0;a<val.length;a++){
-    if(convertUndefined === true && val[a]=='undefined'){
-      val[a]=convertUndefinedTo;
-      continue;
+return table.filter(row => {
+  const re = ignoreCase ? row.inputVal.toLowerCase() : row.inputVal;
+  return input.match(re) ? (fullMatch ? input.match(re)[0]===input : input.match(re)) : undefined;
+}).map(matchedRow => {
+  const re = matchedRow.inputVal;
+  return [matchedRow.output1, matchedRow.output2, matchedRow.output3].map(output=>{
+    return capRep ? (output.match('^\\$\\d+') ? input.match(re)[output.match('\\d+')[0]] : output) : output;
+  }).map(output => {
+    if (convertUndefined && output === undefined) {
+      return convertUndefinedTo;
     }
-    if(convertNull === true && val[a]=='null'){
-      val[a]=convertNullTo;
-      continue;
+    if (convertNull && output === null) {
+      return convertNullTo;
     }
-    if(convertTrue === true && val[a]=='true'){
-      val[a]=convertTrueTo;
-      continue;
+    if (convertTrue && output === true) {
+      return convertTrueTo;
     }
-    if(convertFalse === true && val[a]=='false'){
-      val[a]=convertFalseTo;
-      continue;
+    if (convertFalse && output === false) {
+      return convertFalseTo;
     }
-    if(convertTrue === true && val[a]=='true'){
-      val[a]=convertTrueTo;
-      continue;
+    return output;
+  }).map(output => {
+    if (convertCaseTo === 'lowercase') {
+      return output.toLowerCase();
     }
-  }
-
-  //Convert case
-  for(a=0;a<val.length;a++){
-    if(convertCase === true){
-      if(convertCaseTo=='lowercase'){
-        val[a] = val[a].toLowerCase();
-      } else {
-        val[a] = val[a].toUpperCase();
-      }
+    if (convertCaseTo === 'uppercase') {
+      return output.toUpperCase();
     }
-  }
-}
-//Return the value
-return val;
+    return output;
+  });
+}).shift() || (defaultValue ? defaultValue.split(delimiter) : undefined);
 
 
 ___NOTES___
