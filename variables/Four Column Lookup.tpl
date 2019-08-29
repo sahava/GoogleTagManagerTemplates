@@ -198,36 +198,11 @@ ___TEMPLATE_PARAMETERS___
 ]
 
 
-___WEB_PERMISSIONS___
-
-[
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "debug"
-          }
-        }
-      ]
-    },
-    "isRequired": true
-  }
-]
-
-
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const makeString = require('makeString');
-const log = require('logToConsole');
 const inputVar = makeString(data.inputVar);
-const table = data.lookupTable;
+const table = data.lookupTable || [];
 const defaultValue = data.defaultValue;
 //Format Value Values
 const convertCaseTo = data.convertCaseTo;
@@ -242,63 +217,35 @@ const convertFalseTo = data.convertFalseTo;
 const convertFalse = data.convertFalse;
 //Declare Variables
 //If you need to change your default delimter, do it here.
-var val = defaultValue !== undefined ? defaultValue.split('|') : undefined,
-    obj = [],
-    a,
-    b;
+const delimiter = '|';
 
-if(typeof(table) !=='undefined'){
-table.forEach(function(row){
-  var arr = {};
-  arr[row.inputVal]=[row.output1,row.output2,row.output3];
-  obj.push(arr);
-});
-}
-for(a=0;a<obj.length;a++){
-if (typeof(obj[a][inputVar]) !== 'undefined'){
-  var val = obj[a][inputVar];
-  break;
-} 
-}
-
-if (val !== undefined){
-  //Convert variables
-  for(a=0;a<val.length;a++){
-    if(convertUndefined === true && val[a]== 'undefined'){
-      val[a]=convertUndefinedTo;
-      continue;
+return table.filter(row => {
+  return row.inputVal === inputVar;
+}).map(matchedRow => {
+  return [matchedRow.output1, matchedRow.output2, matchedRow.output3].map(output => {
+    if (convertUndefined && output === undefined) {
+      return convertUndefinedTo;
     }
-    if(convertNull === true && val[a]=='null'){
-      val[a]=convertNullTo;
-      continue;
+    if (convertNull && output === null) {
+      return convertNullTo;
     }
-    if(convertTrue === true && val[a]=='true'){
-      val[a]=convertTrueTo;
-      continue;
+    if (convertTrue && output === true) {
+      return convertTrueTo;
     }
-    if(convertFalse === true && val[a]=='false'){
-      val[a]=convertFalseTo;
-      continue;
+    if (convertFalse && output === false) {
+      return convertFalseTo;
     }
-    if(convertTrue === true && val[a]=='true'){
-      val[a]=convertTrueTo;
-      continue;
+    return output;
+  }).map(output => {
+    if (convertCaseTo === 'lowercase') {
+      return output.toLowerCase();
     }
-  }
-
-  //Convert case
-  for(a=0;a<val.length;a++){
-    if(convertCase === true){
-      if(convertCaseTo=='lowercase'){
-        val[a] = val[a].toLowerCase();
-      } else{
-        val[a] = val[a].toUpperCase();
-      }
+    if (convertCaseTo === 'uppercase') {
+      return output.toUpperCase();
     }
-  }
-}
-//Return the value
-return val;
+    return output;
+  });
+}).shift() || (defaultValue ? defaultValue.split(delimiter) : undefined);
 
 
 ___NOTES___
