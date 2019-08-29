@@ -602,8 +602,8 @@ const pixel = {
 
     //get event parameters method
     getEventParams: (products, currencyCode, revenue) => {
-        let eventParamsClean= {};
-        let eventParams = {
+        const eventParamsClean= {};
+        const eventParams = {
             products: eventProducts.getProductParams(products),
             category_ids: eventProducts.getCategoryString(products),
             currency_code: currencyCode,
@@ -626,7 +626,7 @@ const pixel = {
 
     //VK openapi.js init method
     openapiInit: () => {
-        injectScript('https://vk.com/js/api/openapi.js?159', pixel.setVkAsyncInit(), data.gtmOnFailure, 'vkPixel');
+        injectScript('https://vk.com/js/api/openapi.js?159', pixel.setVkAsyncInit, data.gtmOnFailure, 'vkPixel');
         setInWindow('openapiInject', 1);
     },
 
@@ -677,10 +677,10 @@ const pixel = {
 const eventProducts = {
     //get product parameters method
     getProductParams: products => {
-        let arr = [];
+        const arr = [];
         products.forEach(i => {
-            let productParamsClean = {};
-            let productParams = {
+            const productParamsClean = {};
+            const productParams = {
                 id: makeString(i.id),
                 group_id: makeString(i.brand),
                 price: makeInteger(i.price * 100) / 100
@@ -696,7 +696,7 @@ const eventProducts = {
     //get unique product categories method. Return a string. String type is 'a,b,c'
     getCategoryString: products => {
         let categoryId = '';
-        let check = [];
+        const check = [];
         products.forEach(i => {
             if(check.indexOf(i.category) === -1) {
                 check.push(i.category);
