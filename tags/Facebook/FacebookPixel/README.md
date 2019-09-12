@@ -7,6 +7,7 @@ Simo Ahava (https://www.simoahava.com/).
 # Release notes
 | Date | Notes |
 |------|-------|
+| 12 September 2019 | Updated pixel with GDPR consent call and possibility to add object properties from a variable. |
 | 18 May 2019 | First version of the pixel released. |
 
 # Details
