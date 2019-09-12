@@ -816,8 +816,6 @@ const uid = data.userId ? {uid: data.userId} : {};
 const initObj = mergeObj(uid, cidParams);
 const consent = data.consent === false ? 'revoke' : 'grant';
 
-log(finalObjectProps);
-
 fbq('consent', consent);
 
 // Handle multiple, comma-separated pixel IDs,
