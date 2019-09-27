@@ -1,2 +1,2 @@
 # GTM: Quality Traffic Indicator Custom Template
-Google Tag Manager Custom Template for identifying and scoring quality traffic. Find a more detailed [walkthrough of the template here](https://www.dumkydewilde.nl/2019/06/gtm-custom-templates-how-to-think-about-building-your-own/).
+Google Tag Manager Custom Template for identifying and scoring traffic in a loyalty program style. Give users points based on time on site, number of visits, destinations reached or events fired and then trigger other tags based on this. E.g. identify your 'gold' and 'silver' users and trigger tags specific for those users. Find a more detailed [walkthrough of the template here](https://www.dumkydewilde.nl/2019/06/gtm-custom-templates-how-to-think-about-building-your-own/).
