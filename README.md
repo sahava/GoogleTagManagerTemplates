@@ -1,22 +1,25 @@
-# Custom templates for Google Tag Manager
-In this repository, I intend to collect [custom template files](https://www.simoahava.com/analytics/custom-templates-guide-for-google-tag-manager/) for [Google Tag Manager](https://tagmanager.google.com/).
+# dataLayer Builder + Enhanced Ecommerce
+This is the unofficial Google Enhanced Ecommerce dataLayer builder template. Build all of the EE dataLayers using dropdown functionality with the ability to add custom parameters.
 
-# License
-The repository itself is released to the public under the [MIT License](https://opensource.org/licenses/MIT). By submitting a template into this repository, you accept that the template will fall under this license, too. You can submit a difference `LICENSE` file in the folder to where you upload your own template, in case you want it to override the default MIT license used in the repo.
+# Author
+Michael Ulrich (https://www.wpromote.com/).
 
-# Instructions
-To import a template file into your Google Tag Manager container, follow these steps:
+# Release Notes
+| Date | Notes |
+|-------|-------|
+| 30 September 2019 | First version of the tag released. |
 
-1. Download the `.tpl` file you want to import.
-2. Create a new **template** in Google Tag Manager (either *tag* or *variable*, depending on which type you are importing).
-3. In the action menu in the top right corner of the template editor, choose **Import**.
-4. Select the `.tpl` file from your container.
+# Description
+This template has many adjustable fields that allow you to add your data directly into the properly formatted EE dataLayer.
 
-Importing a template file like this always **overwrites** any work you might have done in the underlying template, so you should always import to a newly created template.
+The Event name field allows you to set the event that fires the dataLayer.
 
-# Taxonomy
-Templates are organized by type (**tag** or **variable**).
+The Event dataLayer field allows you to select the Enhanced Ecommerce dataLayer type that you will push all of your parameters into.
 
-Tag templates are organized by brand (e.g. **Facebook**), and then by template name.
+The Currency Parameter field allows you to add the currency into your dataLayer.
 
-Variable templates are organized by template name.
+The Actionfield Object Parameter field allows you to add any of the standard actionField parameters into your dataLayer.
+
+The Product/Promo Array field allows you to add the product array variable that contains your product data into the dataLayer.
+
+The Custom Parameters field allows you to add any custom parameters into your dataLayer.
