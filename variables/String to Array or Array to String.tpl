@@ -10,8 +10,7 @@
   "version": 1,
   "containerContexts": [
     "WEB"
-  ],
-  "brand": {}
+  ]
 }
 
 
@@ -31,12 +30,12 @@ ___TEMPLATE_PARAMETERS___
     "radioItems": [
       {
         "displayValue": "String to Array",
-        "help": "Convert the given string to an array (e.g. \"123,456,789\" -> [123,456,789])",
+        "help": "Convert the given string to an array (e.g. \"123,456,789\" -\u003e [123,456,789])",
         "value": "stringToArray"
       },
       {
         "displayValue": "Array to String",
-        "help": "Convert the given array of primitives to a string (e.g. [1,2,3] -> \"1,2,3\")",
+        "help": "Convert the given array of primitives to a string (e.g. [1,2,3] -\u003e \"1,2,3\")",
         "value": "arrayToString"
       }
     ]
@@ -106,7 +105,7 @@ ___TEMPLATE_PARAMETERS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const makeInteger = require("makeInteger");
-
+const getType = require("getType");
 const conversionSelection = data.conversionSelection;
 const delimiter = data.delimiter;
 
@@ -121,11 +120,25 @@ switch (conversionSelection) {
     }
     break;
   case "arrayToString":
+    
     const inputArray = data.inputArray;
-    return inputArray.join(delimiter);
+    if (getType(inputArray) === "array"){
+    	return inputArray.join(delimiter);
+    }
+    else{
+      	return undefined;
+    }
+    break;
 }
+
+
+___TESTS___
+
+scenarios: []
 
 
 ___NOTES___
 
 Created on 30/05/2019, 09:00:00
+
+
